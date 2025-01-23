@@ -4,7 +4,6 @@ require('header.php'); // Include the header file
 ?>
 <?php
 require('db.php'); // Ensure this file contains your database connection logic
-session_start();
 ?>
 
 
