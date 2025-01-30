@@ -10,7 +10,7 @@
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 	//Checking the values are existing in the database or not
-	$query = "SELECT * FROM user WHERE username='$username' and password='$password'";
+	$query = "SELECT * FROM users WHERE username='$username' and password='$password'";
 	 
 	$result = mysqli_query($conn, $query) or die(mysqli_error($conn));
 	$count = mysqli_num_rows($result);

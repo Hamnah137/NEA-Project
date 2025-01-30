@@ -30,10 +30,7 @@ require('db.php'); // Ensure this file contains your database connection logic
     </div>
 
 
-    <div class="content">
-        <h1>Welcome to My Website</h1>
-        <p>This is content over the video background.</p>
-    </div>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Qwitcher+Grypen:wght@400;700&display=swap" rel="stylesheet">
@@ -54,7 +51,7 @@ require('db.php'); // Ensure this file contains your database connection logic
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="active"><a href="index.php"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#contact">About us</a></li>
                         <?php if (isset($_SESSION['username'])): ?>
                             <li><a href="dashboard.php"> Dashboard</a></li>
                             <li><a href="logout.php"> Logout</a></li>
@@ -128,12 +125,7 @@ require('db.php'); // Ensure this file contains your database connection logic
             </section>
         </div>
     </main>
-
-
-    <footer class="container">
-        <p class="text-center">&copy; 2024 My Shopping Website. All rights reserved.</p>
-    </footer>
-<head>
+    <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Background Video</title>
     <link rel="stylesheet" href="style.css">
@@ -146,12 +138,11 @@ require('db.php'); // Ensure this file contains your database connection logic
             Your browser does not support HTML5 video.
         </video>
     </div>
-
-
-    <div class="content">
-        <h1>Welcome to My Website</h1>
-        <p>This is content over the video background.</p>
-    </div>
 </body>
+
+
+    <footer class="container">
+        <p class="text-center">&copy; 2024 My Shopping Website. All rights reserved.</p>
+    </footer>
 </html>
 
