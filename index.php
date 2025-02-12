@@ -9,8 +9,9 @@ $result = mysqli_query($conn, $query); // Execute the query
 
 // Check if the query was successful
 if (!$result) {
-    die("Error fetching products: " . mysqli_error($conn));
+    die("❌ Error fetching products: " . mysqli_error($conn));
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -56,6 +57,7 @@ if (!$result) {
                         <li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                         <li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Register</a></li>
                     <?php endif; ?>
+                    <li><a href="shop.php"><span class="glyphicon glyphicon-shopping-cart"></span> Shop</a></li>
                 </ul>
             </div>
         </div>
@@ -91,6 +93,15 @@ if (!$result) {
                     echo '<p>' . htmlspecialchars($row['description']) . '</p>';
                     echo '<p>$' . number_format($row['price'], 2) . '</p>';
                     echo '<p><a href="add_to_cart.php?product_id=' . $row['product_id'] . '&product_name=' . urlencode($row['name']) . '&product_price=' . $row['price'] . '" class="btn btn-primary">Add to Cart</a></p>';
+                    echo '<p><a href="product_details.php?id=' . $row['product_id'] . '" class="btn btn-secondary">View Details</a></p>';
+
+                    // Check if the user is logged in to leave a review
+                    if (isset($_SESSION['user_id'])) {
+                        echo '<p><a href="product_review_form.php?product_id=' . $row['product_id'] . '" class="btn btn-warning">Leave a Review</a></p>';
+                    } else {
+                        echo '<p><a href="login.php" class="btn btn-warning">Login to Review</a></p>';
+                    }
+
                     echo '</div>';
                     echo '</div>';
                     echo '</div>';
@@ -99,29 +110,16 @@ if (!$result) {
             </div>
         </section>
 
-        <!-- ✅ Site Reviews Section -->
+        <!-- Site Reviews Section (Separate from Product Reviews) -->
         <section class="reviews">
-            <h2>What Our Users Say</h2>
+            <h2>What Our Users Say About Us</h2>
             <?php include 'site_reviews_page.php'; ?>
 
             <?php if (isset($_SESSION['user_id'])): ?>
-                <h3>Leave a Review</h3>
-                <?php include 'site_review_form.html'; ?>
+                <h3>Leave a Site Review</h3>
+                <?php include 'site_review_form.php'; ?>
             <?php else: ?>
                 <p><a href="login.php">Log in</a> to leave a review.</p>
-            <?php endif; ?>
-        </section>
-
-        <!-- ✅ Product Reviews Section -->
-        <section class="product-reviews">
-            <h2>Product Reviews</h2>
-            <?php include 'product_reviews_page.php'; ?>
-
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <h3>Review a Product</h3>
-                <?php include 'product_review_form.html'; ?>
-            <?php else: ?>
-                <p><a href="login.php">Log in</a> to review a product.</p>
             <?php endif; ?>
         </section>
 
@@ -135,7 +133,7 @@ if (!$result) {
 </body>
 </html>
 
-<?php
-// Close the database connection
-mysqli_close($conn);
-?>
+
+
+
+

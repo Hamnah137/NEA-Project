@@ -1,29 +1,26 @@
 <?php
 include 'header.php';
-// Start the Session
 session_start();
 require('db.php');
 
 // If the form is submitted
 if (isset($_POST['username']) && isset($_POST['password'])) {
-    // Assigning posted values to variables
     $username = $_POST['username'];
     $password = $_POST['password'];
 
     // Checking the values are existing in the database
-    $query = "SELECT * FROM users WHERE username='$username' and password='$password'";
-
+    $query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
     $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
     $count = mysqli_num_rows($result);
 
     // If the posted values match the database values, create a session for the user
     if ($count == 1) {
-        // Fetch user info, including user_id
         $row = mysqli_fetch_assoc($result);
-        $_SESSION['username'] = $username;
-        $_SESSION['user_id'] = $row['user_id'];  // Store user_id in the session
+        $_SESSION['username'] = $row['username'];  // Store the username
+        $_SESSION['user_id'] = $row['user_id'];    // Store the user_id
+        header('Location: index.php'); // Redirect to home or another page
+        exit;
     } else {
-        // If login credentials don't match, show an error message
         $fmsg = "Invalid Login Credentials.";
     }
 }
@@ -31,8 +28,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 // If the user is logged in, greet them
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
-    echo "Hi " . $username . "!";
-    echo " You are now logged in.";
+    echo "Hi " . $username . "! You are now logged in.";
     echo "<br><a href='index.php'> Home</a><a href='dashboard.php'> Dashboard</a><a href='logout.php'> Logout</a>";
 } else {
     // Display login form if not logged in
@@ -62,3 +58,4 @@ if (isset($_SESSION['username'])) {
     </body>
     </html>
 <?php } ?>
+

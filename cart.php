@@ -1,5 +1,6 @@
 <?php
 session_start();
+require('header.php'); // Include the header file
 
 echo '<h1>Your Cart</h1>';
 

@@ -16,18 +16,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Handle image upload
     if (!empty($_FILES['review_image']['name'])) {
         $targetDir = "uploads/";
+        
+        // Ensure the uploads directory exists
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0777, true); // Create the directory if it doesn't exist
+        }
+
         $imageName = basename($_FILES['review_image']['name']);
         $targetFilePath = $targetDir . time() . "_" . $imageName;
 
         if (move_uploaded_file($_FILES['review_image']['tmp_name'], $targetFilePath)) {
             $imagePath = $targetFilePath;
+        } else {
+            echo "❌ Error uploading image.";
+            exit;
         }
     }
 
     // Insert into site_reviews table
-    $query = "INSERT INTO site_reviews (user_id, rating, review, review_image) VALUES (?, ?, ?, ?)";
+    $query = "INSERT INTO site_reviews (user_id, rating, comment) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("iiss", $user_id, $rating, $review, $imagePath);
+
+    if ($stmt === false) {
+        die("❌ Database Error: " . $conn->error);
+    }
+
+    $stmt->bind_param("iis", $user_id, $rating, $review);
 
     if ($stmt->execute()) {
         echo "✅ Review submitted successfully.";
