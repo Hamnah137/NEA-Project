@@ -1,101 +1,71 @@
-USE `db_1`;
+-- phpMyAdmin SQL Dump
+-- version 4.5.4.1
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Feb 13, 2025 at 03:44 PM
+-- Server version: 5.7.11
+-- PHP Version: 5.6.18
 
--- Create Users Table
-CREATE TABLE IF NOT EXISTS `users` (
-  `user_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(50) NOT NULL UNIQUE,
-  `password` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(100) NOT NULL UNIQUE,
-  `profile_image` VARCHAR(255) DEFAULT NULL,
-  `is_admin` TINYINT(1) DEFAULT 0,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`user_id`)
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `db_1`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `product_id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text,
+  `price` decimal(10,2) NOT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `shop` varchar(255) NOT NULL DEFAULT 'main'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Create Products Table
-CREATE TABLE IF NOT EXISTS `products` (
-  `product_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100) NOT NULL,
-  `description` TEXT,
-  `price` DECIMAL(10,2) NOT NULL,
-  `image_path` VARCHAR(255) DEFAULT NULL,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+--
+-- Dumping data for table `products`
+--
 
--- Create Cart Table
-CREATE TABLE IF NOT EXISTS `cart` (
-  `cart_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `user_id` INT(11) NOT NULL,
-  `product_id` INT(11) NOT NULL,
-  `quantity` INT(11) DEFAULT 1,
-  PRIMARY KEY (`cart_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
-  FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO `products` (`product_id`, `name`, `description`, `price`, `image_path`, `created_at`, `shop`) VALUES
+(1, 'RED JUMPER WITH A SWAN', 'Keep you warm in this winter season ;)', '19.99', 'https://aidashoreditch.co.uk/cdn/shop/files/EWC409_1_600x.jpg?v=1727880838', '2025-02-05 11:17:16', 'main'),
+(2, 'GREEN HOODIE', 'Twin with nature, twin with us :)', '29.99', 'https://aidashoreditch.co.uk/cdn/shop/products/CMC379_GREEN_FLAT_600x.jpg?v=1664882952', '2025-02-05 11:19:24', 'main'),
+(3, 'BLUE DENIM JACKET', 'Go with fashion with us', '39.99', 'https://aidashoreditch.co.uk/cdn/shop/files/EWC365_5_600x.jpg?v=1726246127', '2025-02-05 11:21:30', 'main'),
+(6, 'Children Overhead Hoodie', 'Go with the fashion:)', '15.00', 'https://assets.ajio.com/medias/sys_master/root/20221101/6Qig/63602143f997ddfdbd4e21ae/-473Wx593H-441589790-blue-MODEL.jpg', '2025-02-13 15:25:52', 'main'),
+(7, 'Children Overhead Hoodie', 'Go with the fashion:)', '15.00', 'https://www.tradeprint.co.uk/dam/jcr:e64f5c2d-8100-4508-80d9-b24d519b477f/sun-yellow.webp', '2025-02-13 15:25:52', 'main');
 
--- Create Orders Table
-CREATE TABLE IF NOT EXISTS `orders` (
-  `order_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `user_id` INT(11) NOT NULL,
-  `total` DECIMAL(10,2) NOT NULL,
-  `status` ENUM('Pending', 'Completed', 'Cancelled') DEFAULT 'Pending',
-  `order_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`order_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+--
+-- Indexes for dumped tables
+--
 
--- Create Order Details Table
-CREATE TABLE IF NOT EXISTS `orderdetails` (
-  `order_detail_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `order_id` INT(11) NOT NULL,
-  `product_id` INT(11) NOT NULL,
-  `quantity` INT(11) NOT NULL,
-  `price` DECIMAL(10,2) NOT NULL,
-  PRIMARY KEY (`order_detail_id`),
-  FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
-  FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`product_id`);
 
--- Create Product Reviews Table
-CREATE TABLE IF NOT EXISTS `product_reviews` (
-  `review_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `product_id` INT(11) NOT NULL,
-  `user_id` INT(11) NOT NULL,
-  `rating` INT(1) NOT NULL CHECK (rating BETWEEN 1 AND 5),
-  `comment` TEXT NOT NULL,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`review_id`),
-  FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE,
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+--
+-- AUTO_INCREMENT for dumped tables
+--
 
--- Create Site Reviews Table
-CREATE TABLE IF NOT EXISTS `site_reviews` (
-  `site_review_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `user_id` INT(11) NOT NULL,
-  `rating` INT(1) NOT NULL CHECK (rating BETWEEN 1 AND 5),
-  `comment` TEXT NOT NULL,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`site_review_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Create Admins Table
-CREATE TABLE IF NOT EXISTS `admins` (
-  `admin_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `user_id` INT(11) NOT NULL UNIQUE,
-  PRIMARY KEY (`admin_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Create Search Log Table
-CREATE TABLE IF NOT EXISTS `search_log` (
-  `log_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `user_id` INT(11) DEFAULT NULL,
-  `search_query` VARCHAR(255) NOT NULL,
-  `search_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`log_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-SELECT user_id FROM users WHERE username = 'admin' LIMIT 1;
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
