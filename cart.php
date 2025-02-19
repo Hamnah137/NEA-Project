@@ -83,7 +83,3 @@ require('header.php'); // Include the header file
 
 </body>
 </html>
-
-
-
-

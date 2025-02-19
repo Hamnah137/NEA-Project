@@ -22,7 +22,7 @@ while ($row = $result->fetch_assoc()) {
     if (!empty($row['profile_image'])) {
         echo "<img src='" . htmlspecialchars($row['profile_image']) . "' alt='User Image' width='50' height='50'>";
     } else {
-        echo "<img src='default_profile.png' alt='Default User Image' width='50' height='50'>";
+        echo "<img src='default_profile.png' alt='Default User Image' width='50' height='50'>"; // Fallback to a default image if none exists
     }
 
     echo "<strong>" . htmlspecialchars($row['username']) . "</strong>"; // Display username
@@ -35,4 +35,3 @@ while ($row = $result->fetch_assoc()) {
 
 $conn->close(); // Close the connection
 ?>
-

@@ -1,104 +1,77 @@
 <?php
-include 'header.php';
 session_start();
 require('db.php');
+include 'header.php';
 
-// If the form is submitted
-if (isset($_POST['username']) && isset($_POST['password'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password']; // User's entered password
+// Handle Login Submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = isset($_POST['username']) ? trim($_POST['username']) : '';
+$password = isset($_POST['password']) ? $_POST['password'] : '';
 
-    // Fetch the user from the database
-    $query = "SELECT * FROM users WHERE username='$username'";
-    $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
-    $count = mysqli_num_rows($result);
 
-    // If the username exists, verify the password
-    if ($count == 1) {
-        $row = mysqli_fetch_assoc($result);
-        
-        // Check if the entered password matches the hashed password
-        if (password_verify($password, $row['password'])) {
-            // Password is correct, create session for the user
-            $_SESSION['username'] = $row['username'];  // Store the username
-            $_SESSION['user_id'] = $row['user_id'];    // Store the user_id
-            header('Location: index.php'); // Redirect to home or another page
-            exit;
+    if (!empty($username) && !empty($password)) {
+        $stmt = $conn->prepare("SELECT user_id, username, password FROM users WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+            if (password_verify($password, $user['password'])) {
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['user_id'] = $user['user_id'];
+                header('Location: index.php');
+                exit;
+            } else {
+                $loginError = "Incorrect username or password.";
+            }
         } else {
-            $fmsg = "Invalid Login Credentials."; // Incorrect password
+            $loginError = "Incorrect username or password.";
         }
+        $stmt->close();
     } else {
-        $fmsg = "Invalid Login Credentials."; // User not found
+        $loginError = "All fields are required.";
     }
 }
-
-// If the user is logged in, greet them
-if (isset($_SESSION['username'])) {
-    $username = $_SESSION['username'];
-    echo "Hi " . $username . "! You are now logged in.";
-    echo "<br><a href='index.php'> Home</a><a href='dashboard.php'> Dashboard</a><a href='logout.php'> Logout</a>";
-} else {
-    // Display login form if not logged in
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Your Website</title>
-    <!-- Include Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJr+pqxF6bRt6l0dX9jjpKmjnu9lccjGGXpG9F/YoOXl2GKm9zHg2DdAcKh0" crossorigin="anonymous">
-    <style>
-        body {
-            background-color: #f4f7fc;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding-top: 50px;
-        }
-        .form-signin-heading {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .btn {
-            font-size: 16px;
-        }
-        .alert {
-            margin-bottom: 20px;
-        }
-    </style>
-</head>
-<body>
 
-<div class="container">
-    <form class="form-signin" method="POST">
-        <?php if (isset($fmsg)) { ?>
-            <div class="alert alert-danger" role="alert"> <?php echo $fmsg; ?> </div>
-        <?php } ?>
-        
-        <h2 class="form-signin-heading">Please Login</h2>
-        
-        <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" name="username" class="form-control" placeholder="Enter Username" required>
+<div class="container mt-5 pt-5">
+    <?php if (isset($_SESSION['username'])): ?>
+        <div class="text-center">
+            <h2 class="mb-4">Welcome, <?= htmlspecialchars($_SESSION['username']); ?>!</h2>
+            <a href="index.php" class="btn btn-primary me-2">Home</a>
+            <a href="dashboard.php" class="btn btn-success me-2">Dashboard</a>
+            <a href="logout.php" class="btn btn-danger">Logout</a>
         </div>
-
-        <div class="mb-3">
-            <label for="inputPassword" class="form-label">Password</label>
-            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Enter Password" required>
+    <?php else: ?>
+        <div class="card shadow-sm p-4 border-0 rounded-3">
+            <h3 class="text-center mb-4">Login to Your Account</h3>
+            <?php if (!empty($loginError)): ?>
+                <div class="alert alert-danger" role="alert">
+                    <?= htmlspecialchars($loginError); ?>
+                </div>
+            <?php endif; ?>
+            <form method="POST" novalidate>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="register.php" class="text-decoration-none">Don't have an account? Register here</a>
+                </div>
+            </form>
         </div>
-
-        <button class="btn btn-lg btn-primary btn-block w-100" type="submit">Login</button>
-        <a class="btn btn-lg btn-outline-secondary btn-block w-100 mt-3" href="register.php">Register</a>
-    </form>
+    <?php endif; ?>
 </div>
 
-<!-- Include Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybF+G12bXzQikC3S2b7eGTkwA1P6JXf6UMuZrEw6a1VqW9Hif" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0k8Fc5wmXytJvX6BtbAT0FuP2ftM8xt6bx6l6Erfmy8Zb+5G" crossorigin="anonymous"></script>
-
-</body>
-</html>
-<?php } ?>
+<style>
+    body { padding-top: 80px; background-color: #f8f9fa; }
+    .card { max-width: 420px; margin: 0 auto; }
+</style>
