@@ -1,34 +1,30 @@
 <?php
-require('db.php'); // Include the database connection
-
 session_start();
+include 'header.php'; // Include header and necessary files
+include 'db.php'; // Database connection
 
-// Check if product_id is passed in the URL
-if (!isset($_GET['id'])) {
-    echo "Product not found.";
+$product_id = isset($_GET['id']) ? $_GET['id'] : null;
+
+if (!$product_id) {
+    echo "<p>Invalid product.</p>";
     exit;
 }
-
-$product_id = intval($_GET['id']);
 
 // Fetch product details
-$query = "SELECT * FROM products WHERE product_id = ?";
-$stmt = $conn->prepare($query);
+$query = "SELECT * FROM products WHERE product_id = '$product_id'";
+$product_result = mysqli_query($conn, $query);
+$product = mysqli_fetch_assoc($product_result);
 
-if ($stmt === false) {
-    die('MySQL prepare error: ' . $conn->error); // Output the error if the query fails
+// Fetch reviews for this product
+$reviews_query = "SELECT r.comment, r.rating, u.username FROM product_reviews r 
+                  JOIN users u ON r.user_id = u.user_id 
+                  WHERE r.product_id = '$product_id'";
+$reviews_result = mysqli_query($conn, $reviews_query);
+
+// Check if there are errors in the query
+if (!$reviews_result) {
+    die("Error fetching reviews: " . mysqli_error($conn));
 }
-
-$stmt->bind_param("i", $product_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 0) {
-    echo "Product not found.";
-    exit;
-}
-
-$product = $result->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -36,91 +32,139 @@ $product = $result->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details</title>
+    <title><?php echo htmlspecialchars($product['name']); ?> - Product Details</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2.5em;
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .product-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .product-description {
+            flex: 1;
+            margin-right: 30px;
+            font-size: 1.2em;
+            color: #555;
+        }
+        .price {
+            font-size: 1.5em;
+            color: #e67e22;
+            font-weight: bold;
+        }
+        .review-section {
+            margin-top: 40px;
+        }
+        .review {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .review h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .review p {
+            font-size: 1.1em;
+            color: #555;
+        }
+        .reviewer {
+            font-weight: bold;
+            color: #333;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #e67e22;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        .btn:hover {
+            background-color: #d35400;
+        }
+        .login-msg {
+            font-size: 1.1em;
+            color: #555;
+            margin-top: 10px;
+        }
+        /* Star Rating Styling */
+        .star-rating {
+            display: flex;
+        }
+        .star-rating span {
+            font-size: 1.5em;
+            color: #f39c12;
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1><?php echo htmlspecialchars($product['name']); ?></h1>
-    <p><?php echo htmlspecialchars($product['description']); ?></p>
-    <p>Price: $<?php echo htmlspecialchars($product['price']); ?></p>
+    <div class="container">
+        <h1><?php echo htmlspecialchars($product['name']); ?></h1>
+        <div class="product-info">
+            <div class="product-description">
+                <p><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
+                <p class="price">Price: $<?php echo htmlspecialchars($product['price']); ?></p>
+            </div>
+            <img src="<?php echo htmlspecialchars($product['image_path']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="product-image">
+        </div>
 
-    <h2>Submit a Product Review</h2>
-    <form action="submit_review.php" method="POST">
-        <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product_id); ?>">
-        <label for="rating">Rating (1-5):</label>
-        <input type="number" name="rating" min="1" max="5" required>
-        <label for="review">Review:</label>
-        <textarea name="review" required></textarea>
-        <button type="submit">Submit Review</button>
-    </form>
+        <!-- Reviews Section -->
+<div class="review-section">
+    <h2>Customer Reviews</h2>
+    <?php while ($review = mysqli_fetch_assoc($reviews_result)) { ?>
+        <div class="review">
+            <p class="reviewer"><?php echo htmlspecialchars($review['username']); ?>:</p>
+            <div class="star-rating">
+                <?php
+                $rating = $review['rating'];
+                for ($i = 1; $i <= 5; $i++) {
+                    echo $i <= $rating ? '★' : '☆';
+                }
+                ?>
+            </div>
+            <p><?php echo nl2br(htmlspecialchars($review['comment'])); ?></p>
+        </div>
+    <?php } ?>
 
-    <h3>Product Reviews</h3>
-    <?php
-    // Display product reviews with profile images
-    $review_query = "SELECT users.username, users.profile_image, product_reviews.rating, product_reviews.comment 
-                     FROM product_reviews 
-                     JOIN users ON product_reviews.user_id = users.user_id 
-                     WHERE product_reviews.product_id = ?";
-    $review_stmt = $conn->prepare($review_query);
-    if ($review_stmt === false) {
-        die('MySQL prepare error: ' . $conn->error);
-    }
-    $review_stmt->bind_param("i", $product_id);
-    $review_stmt->execute();
-    $review_result = $review_stmt->get_result();
-
-    if ($review_result->num_rows > 0) {
-        while ($review = $review_result->fetch_assoc()) {
-            echo "<div class='review'>";
-            if (!empty($review['profile_image'])) {
-                echo "<img src='" . htmlspecialchars($review['profile_image']) . "' alt='Profile Image' width='50' height='50'>";
-            }
-            echo "<strong>" . htmlspecialchars($review['username']) . "</strong>";
-            echo "<p>Rating: " . htmlspecialchars($review['rating']) . "/5</p>";
-            echo "<p>" . htmlspecialchars($review['comment']) . "</p>";
-            echo "</div>";
-        }
-    } else {
-        echo "<p>No reviews yet.</p>";
-    }
-
-    $review_stmt->close();
-    ?>
-
-    <h3>Site Reviews</h3>
-    <?php
-    // Display site reviews with profile images
-    $site_review_query = "SELECT users.username, users.profile_image, site_reviews.rating, site_reviews.comment 
-                          FROM site_reviews 
-                          JOIN users ON site_reviews.user_id = users.user_id";
-    $site_review_stmt = $conn->prepare($site_review_query);
-    if ($site_review_stmt === false) {
-        die('MySQL prepare error: ' . $conn->error);
-    }
-    $site_review_stmt->execute();
-    $site_review_result = $site_review_stmt->get_result();
-
-    if ($site_review_result->num_rows > 0) {
-        while ($review = $site_review_result->fetch_assoc()) {
-            echo "<div class='review'>";
-            if (!empty($review['profile_image'])) {
-                echo "<img src='" . htmlspecialchars($review['profile_image']) . "' alt='Profile Image' width='50' height='50'>";
-            }
-            echo "<strong>" . htmlspecialchars($review['username']) . "</strong>";
-            echo "<p>Rating: " . htmlspecialchars($review['rating']) . "/5</p>";
-            echo "<p>" . htmlspecialchars($review['comment']) . "</p>";
-            echo "</div>";
-        }
-    } else {
-        echo "<p>No reviews yet.</p>";
-    }
-
-    $site_review_stmt->close();
-    ?>
-
+    <!-- Leave a Review Button -->
+    <?php if (isset($_SESSION['user_id'])) { ?>
+        <a href="submit_review.php?product_id=<?php echo $product['product_id']; ?>" class="btn">Leave a Review</a>
+    <?php } else { ?>
+        <p class="login-msg">Login to leave a review. <a href="login.php">Login Here</a></p>
+    <?php } ?>
+</div>
 </body>
 </html>
-
-
-
-
-

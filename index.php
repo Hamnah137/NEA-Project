@@ -11,7 +11,6 @@ $result = mysqli_query($conn, $query); // Execute the query
 if (!$result) {
     die("❌ Error fetching products: " . mysqli_error($conn));
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -26,12 +25,15 @@ if (!$result) {
 </head>
 <body>
 
-<div class="video-container">
-    <video autoplay muted loop class="background-video">
-        <source src="3433669499-preview.mp4" type="video/mp4">
-        Your browser does not support HTML5 video.
-    </video>
-</div>
+<!-- Video Background Only for Home Page -->
+<?php if (basename($_SERVER['PHP_SELF']) == 'index.php'): ?>
+    <div class="video-container">
+        <video autoplay muted loop class="background-video">
+            <source src="3433669499-preview.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
+<?php endif; ?>
 
 <header>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -75,6 +77,7 @@ if (!$result) {
             <?php endif; ?>
         </div>
 
+        <!-- Products Section -->
         <section class="products">
             <h2>Featured Products</h2>
             <div class="row">
@@ -132,6 +135,7 @@ if (!$result) {
 
 </body>
 </html>
+
 
 
 

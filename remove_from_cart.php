@@ -1,17 +1,17 @@
 <?php
 session_start();
 
-if (isset($_GET['index'])) {
-    $index = (int)$_GET['index'];
-
-    if (isset($_SESSION['cart'][$index])) {
-        unset($_SESSION['cart'][$index]);
-        // Re-index the array to maintain proper order
-        $_SESSION['cart'] = array_values($_SESSION['cart']);
+// Check if the cart is set
+if (isset($_SESSION['cart'])) {
+    // Check if the item ID exists in the cart
+    if (isset($_GET['id']) && isset($_SESSION['cart'][$_GET['id']])) {
+        // Remove the item from the cart using its ID
+        unset($_SESSION['cart'][$_GET['id']]);
     }
 }
 
-header("Location: cart_display.php");
+// Redirect back to the cart page
+header('Location: cart.php');
 exit();
 ?>
 

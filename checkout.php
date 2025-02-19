@@ -1,35 +1,55 @@
 <?php
 session_start();
-require('db.php');
+require('header.php'); // Include header here
 
-if (!isset($_SESSION['username'])) {
-    echo "You must log in to place an order.";
-    exit();
+include 'db.php'; // Database connection
+
+// Redirect if cart is empty
+if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+    header('Location: shop.php');
+    exit;
 }
 
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Save order details to the database
-    $username = $_SESSION['username'];
-    $items = json_encode($_SESSION['cart']); // Store cart as JSON
-    $total = array_sum(array_column($_SESSION['cart'], 'price'));
+    $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+    $totalPrice = 0;
 
-    $query = "INSERT INTO orders (username, items, total) VALUES ('$username', '$items', '$total')";
-    if (mysqli_query($conn, $query)) {
-        // Send confirmation email
-        $to = $_SESSION['email']; // Assuming email is stored in session during login
-        $subject = "Order Confirmation";
-        $message = "Thank you for your order! Total: \$$total";
-        mail($to, $subject, $message);
+    if ($userId) {
+        // Insert order without address
+        $stmt = $conn->prepare("INSERT INTO orders (user_id, order_date) VALUES (?, NOW())");
+        $stmt->bind_param("i", $userId);
+        if ($stmt->execute()) {
+            $orderId = $stmt->insert_id;
 
-        echo "Order placed successfully!";
-        unset($_SESSION['cart']); // Clear cart
+            // Insert order items
+            foreach ($_SESSION['cart'] as $productId => $product) {
+                $quantity = $product['quantity'];
+                $price = $product['price'];
+                $totalPrice += ($price * $quantity);
+
+                $stmtItem = $conn->prepare("INSERT INTO orderdetails (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)");
+                $stmtItem->bind_param("iiid", $orderId, $productId, $quantity, $price);
+                $stmtItem->execute();
+            }
+
+            // Clear cart after order
+            unset($_SESSION['cart']);
+
+            // Redirect to order success page
+            header("Location: order_success.php?order_id=" . $orderId);
+            exit;
+        } else {
+            echo '<p>Error placing order. Please try again.</p>';
+        }
     } else {
-        echo "Error: " . mysqli_error($conn);
+        echo '<p>Please ensure you are logged in to place an order.</p>';
     }
 }
 ?>
-<h3>Checkout</h3>
-<p>Total: $<?= array_sum(array_column($_SESSION['cart'], 'price')) ?></p>
+
+<h2>Checkout</h2>
 <form method="POST">
     <button type="submit">Place Order</button>
 </form>
+<a href="cart.php"><button>Back to Cart</button></a>

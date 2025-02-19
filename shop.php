@@ -44,7 +44,16 @@ if (!$result) {
                     <h3><?php echo $product_name; ?></h3>
                     <p><?php echo $product_description; ?></p>
                     <p><strong>Price:</strong> $<?php echo $price; ?></p>
-                    <a href="product_details.php?id=<?php echo $product['product_id']; ?>" class="btn btn-primary">View Details</a>
+
+                    <!-- Add to Cart Form -->
+                    <form action="cart.php" method="POST">
+                        <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
+                        <input type="hidden" name="product_name" value="<?php echo $product_name; ?>">
+                        <input type="hidden" name="product_price" value="<?php echo $price; ?>">
+                        <button type="submit" name="add_to_cart" class="btn btn-primary">Add to Cart</button>
+                    </form>
+
+                    <a href="product_details.php?id=<?php echo $product['product_id']; ?>" class="btn btn-secondary">View Details</a>
 
                     <!-- Review Section -->
                     <div class="review-section">
@@ -61,6 +70,8 @@ if (!$result) {
             <?php } ?>
         </div> <!-- End of product-container -->
     </div>
+
+    <!-- Footer or additional content here -->
 </body>
 </html>
 
