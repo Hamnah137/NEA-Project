@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 17, 2025 at 02:00 PM
+-- Generation Time: Feb 19, 2025 at 12:29 PM
 -- Server version: 5.7.11
 -- PHP Version: 5.6.18
 
@@ -44,7 +44,9 @@ INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `profile_image`
 (1, 'linajohn', 'dollyyy', 'linajohn@rrr.com', NULL, 0, '2025-01-29 11:08:31'),
 (2, 'evanbravo', 'password', 'evan123@gmail.com', NULL, 0, '2025-01-29 11:26:10'),
 (3, 'marvi12', 'raven', 'marvi123@gmail.www', '', 0, '2025-02-05 09:28:07'),
-(4, 'minakhan', 'hello', 'minakhan@yahoo.com', '', 0, '2025-02-12 11:49:10');
+(4, 'minakhan', 'hello', 'minakhan@yahoo.com', '', 0, '2025-02-12 11:49:10'),
+(5, 'hhak12', 'home', 'jhajai.ksk@gmail.com', '', 0, '2025-02-19 09:25:06'),
+(6, 'humainshah', '$2y$10$sOSQKcnXpN7fgTVs/XJj0.SlJhnBBibgRyQRuluhjuId9mHZpgkuC', 'hassuaui@gmail.com', '', 0, '2025-02-19 12:06:38');
 
 --
 -- Indexes for dumped tables
@@ -66,7 +68,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
