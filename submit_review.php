@@ -11,25 +11,29 @@ if (!isset($_SESSION['user_id'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get POST data
     $user_id = $_SESSION['user_id'];
-    $rating = intval($_POST['rating']);
-    $review = mysqli_real_escape_string($conn, $_POST['review']); // Use $conn here
+    $rating = isset($_POST['rating']) ? intval($_POST['rating']) : 0;
+    $review = isset($_POST['review']) ? mysqli_real_escape_string($conn, $_POST['review']) : '';
 
-    // Check if it's a product review (based on the presence of product_id)
-    if (isset($_POST['product_id'])) {
-        $product_id = $_POST['product_id'];
+    // Validate rating
+    if ($rating < 1 || $rating > 5) {
+        echo "<p>❌ Error: Please select a valid rating between 1 and 5.</p>";
+        exit;
+    }
 
-        // Insert product review into the database
+    // Check if it's a product review
+    if (isset($_POST['product_id']) && !empty($_POST['product_id'])) {
+        $product_id = intval($_POST['product_id']);
+
         $query = "INSERT INTO product_reviews (product_id, user_id, rating, comment) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
 
         if ($stmt === false) {
-            die("❌ Database Error: " . $conn->error);
+            die("❌ Database Error (Prepare): " . $conn->error);
         }
 
         $stmt->bind_param("iiis", $product_id, $user_id, $rating, $review);
 
         if ($stmt->execute()) {
-            // Redirect back to the product details page
             header("Location: product_details.php?id=" . $product_id);
             exit;
         } else {
@@ -38,19 +42,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $stmt->close();
     } else {
-        // No product_id means it's a site review
-        // Insert site review into the database
+        // Site review section
         $query = "INSERT INTO site_reviews (user_id, rating, comment) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($query);
 
         if ($stmt === false) {
-            die("❌ Database Error: " . $conn->error);
+            die("❌ Database Error (Prepare): " . $conn->error);
         }
 
         $stmt->bind_param("iis", $user_id, $rating, $review);
 
         if ($stmt->execute()) {
-            // Redirect back to the site review page
             header("Location: site_reviews.php");
             exit;
         } else {
@@ -60,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
     }
 
-    $conn->close(); // Use $conn here
+    $conn->close();
 }
 ?>
 
@@ -110,15 +112,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             cursor: pointer;
             transition: color 0.2s ease;
         }
-        .star:hover,
-        .star.selected {
-            color: #e67e22;
-        }
         .star.selected {
             color: #f39c12;
         }
         .stars input {
             display: none;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
         }
         .submit-btn {
             background-color: #e67e22;
@@ -146,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <h1>Submit Your Review</h1>
 
     <!-- Review Form -->
-    <form action="submit_review.php" method="POST">
+    <form action="submit_review.php<?php echo isset($_GET['product_id']) ? '?product_id=' . $_GET['product_id'] : ''; ?>" method="POST">
         <div class="form-group">
             <label for="rating">Rating:</label>
             <div class="stars">
@@ -178,17 +182,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit" class="submit-btn">Submit Review</button>
         </div>
     </form>
-
 </div>
 
 <script>
-    // JavaScript to handle the star rating input visually
+    // JavaScript for star rating selection
     const stars = document.querySelectorAll('.star');
-    stars.forEach(star => {
+    stars.forEach((star, index) => {
         star.addEventListener('click', function() {
-            stars.forEach(star => star.classList.remove('selected'));
+            stars.forEach(s => s.classList.remove('selected'));
             this.classList.add('selected');
-            document.querySelector('input[name="rating"][value="' + this.getAttribute('for').replace('star', '') + '"]').checked = true;
+            document.getElementById('star' + (index + 1)).checked = true;
         });
     });
 </script>

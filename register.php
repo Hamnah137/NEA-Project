@@ -8,41 +8,66 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Capture form data
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $confirm_email = mysqli_real_escape_string($conn, $_POST['confirm_email']);
 
-    // Handle profile image upload
-    $profileImage = null;
-    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        $fileTmpPath = $_FILES['profile_image']['tmp_name'];
-        $fileName = $_FILES['profile_image']['name'];
-        $fileType = $_FILES['profile_image']['type'];
+    // Validate email and password match
+    if ($email !== $confirm_email) {
+        echo "<div class='alert alert-danger'>⚠️ Email addresses do not match.</div>";
+        exit;
+    }
 
-        if (in_array($fileType, $allowedTypes)) {
-            $uploadDir = 'uploads/profile_images/';
-            $profileImage = $uploadDir . basename($fileName);
-            if (move_uploaded_file($fileTmpPath, $profileImage)) {
-                // Image uploaded successfully
-            } else {
-                echo "Error uploading profile image.";
-            }
-        } else {
-            echo "Only JPG, PNG, and GIF files are allowed.";
-        }
+    if ($password !== $confirm_password) {
+        echo "<div class='alert alert-danger'>⚠️ Passwords do not match.</div>";
+        exit;
     }
 
     // Hash the password
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    // Hash the confirm password (although not needed to store, just for the process)
+    $hashedConfirmPassword = password_hash($confirm_password, PASSWORD_DEFAULT);
+
+    // Handle profile image upload
+    $profileImage = null;
+    if (isset($_FILES['profile_image'])) {
+        $uploadError = $_FILES['profile_image']['error'];
+        if ($uploadError === 0) {
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            $fileTmpPath = $_FILES['profile_image']['tmp_name'];
+            $fileName = $_FILES['profile_image']['name'];
+            $fileType = $_FILES['profile_image']['type'];
+            $fileSize = $_FILES['profile_image']['size'];
+
+            // ✅ File size check (10MB limit)
+            if ($fileSize <= 10 * 1024 * 1024) {
+                if (in_array($fileType, $allowedTypes)) {
+                    $uploadDir = 'images/';
+                    $filePath = $uploadDir . uniqid() . '-' . basename($fileName);
+                    if (move_uploaded_file($fileTmpPath, $filePath)) {
+                        $profileImage = $filePath;
+                    } else {
+                        echo "<div class='alert alert-danger'>⚠️ Error uploading profile image.</div>";
+                    }
+                } else {
+                    echo "<div class='alert alert-warning'>⚠️ Only JPG, PNG, and GIF files are allowed.</div>";
+                }
+            } else {
+                echo "<div class='alert alert-warning'>⚠️ File size exceeds 10MB limit.</div>";
+            }
+        } else {
+            echo "<div class='alert alert-danger'>⚠️ File upload error code: $uploadError.</div>";
+        }
+    }
 
     // Insert data into the database
-    $query = "INSERT INTO users (username, password, email, profile_image) 
-              VALUES ('$username', '$hashedPassword', '$email', '$profileImage')";
+    $query = "INSERT INTO users (username, password, email, confirm_email, confirm_password, profile_image) 
+              VALUES ('$username', '$hashedPassword', '$email', '$confirm_email', '$hashedConfirmPassword', '$profileImage')";
 
     if (mysqli_query($conn, $query)) {
-        echo "<div class='alert alert-success'>Registration successful! You can now log in.</div>";
-        // Redirect to login page or set session variables
+        echo "<div class='alert alert-success'>✅ Registration successful! You can now <a href='login.php'>log in</a>.</div>";
     } else {
-        echo "<div class='alert alert-danger'>Error: " . mysqli_error($conn) . "</div>";
+        echo "<div class='alert alert-danger'>❌ Error: " . mysqli_error($conn) . "</div>";
     }
 }
 ?>
@@ -56,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="styles.css"> <!-- Custom styles -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -81,13 +106,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
 
                         <div class="form-group">
+                            <label for="confirm_password">Confirm Password:</label>
+                            <input type="password" name="confirm_password" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
                             <label for="email">Email:</label>
                             <input type="email" name="email" class="form-control" required>
                         </div>
 
                         <div class="form-group">
+                            <label for="confirm_email">Confirm Email:</label>
+                            <input type="email" name="confirm_email" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
                             <label for="profile_image">Upload Profile Image:</label>
                             <input type="file" name="profile_image" class="form-control-file" accept="image/*">
+                            <small class="form-text text-muted">Max file size: 10MB.</small>
                         </div>
 
                         <button type="submit" class="btn btn-success btn-block">Register</button>
@@ -99,11 +135,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </div>
 
-<!-- Footer -->
 <footer class="container text-center mt-5">
     <p>&copy; 2024 My Shopping Website. All rights reserved.</p>
 </footer>
 
+<!-- JavaScript to check file size before submitting the form -->
+<script>
+    document.querySelector("form").onsubmit = function(e) {
+        var fileInput = document.querySelector('input[type="file"]');
+        var file = fileInput.files[0];
+        var maxSize = 6291456; // 6MB in bytes
+        if (file && file.size > maxSize) {
+            e.preventDefault();
+            alert("File size exceeds the 6 MB limit. Please upload a smaller file.");
+        }
+    };
+</script>
+
 </body>
 </html>
-

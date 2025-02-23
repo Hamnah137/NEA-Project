@@ -3,21 +3,27 @@ session_start();
 include 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     if (!isset($_SESSION['user_id'])) {
         echo "Error: You must be logged in to submit a review.";
         exit;
     }
 
+    // Check if the comment field exists
+    if (!isset($_POST['comment']) || empty($_POST['comment'])) {
+        echo "❌ Error: Review cannot be empty.";
+        exit;
+    }
+
     $user_id = $_SESSION['user_id'];
     $rating = intval($_POST['rating']);
-    $review = mysqli_real_escape_string($conn, $_POST['review']);
+    $review = mysqli_real_escape_string($conn, $_POST['comment']);
     $imagePath = NULL;
 
     // Handle image upload
     if (!empty($_FILES['review_image']['name'])) {
         $targetDir = "uploads/";
-        
-        // Ensure the uploads directory exists
+
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0777, true); // Create the directory if it doesn't exist
         }

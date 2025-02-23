@@ -1,37 +1,55 @@
-/* Reset some default styles for consistent rendering */
+/* Reset default styles for consistent rendering */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Customizing the navbar */
+/* Body padding to prevent header overlap */
+body {
+  padding-top: 80px; /* Adjust based on the navbar height */
+  font-family: Arial, sans-serif;
+}
+
+/* Navbar styling */
 .navbar {
-  background-color: #0044cc; /* Dark Blue Background */
+  background-color: #0044cc; /* Dark blue background */
   margin-bottom: 0;
   border-radius: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 .navbar-brand {
   color: white !important;
   font-size: 1.5em;
+  font-weight: bold;
 }
 
 .navbar-nav > li > a {
   color: white !important;
   padding: 15px 20px;
   font-size: 1.1em;
+  transition: color 0.3s ease;
 }
 
 .navbar-nav li a:hover {
-  color: #ffd700 !important; /* Gold color for hover effect */
+  color: #ffd700 !important; /* Gold hover effect */
 }
 
 .navbar-text {
   color: white;
 }
 
-/* Background Video Styling */
+.navbar-collapse {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Background video styling */
 .video-container {
   position: fixed;
   top: 0;
@@ -41,6 +59,7 @@
   overflow: hidden;
   z-index: -1;
 }
+
 .background-video {
   position: absolute;
   top: 50%;
@@ -53,12 +72,35 @@
   object-fit: cover;
 }
 
-.navbar-collapse {
+/* Product layout styling */
+.product-container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
+  margin: 20px 0;
 }
 
-/* Make sure the navbar is aligned properly on smaller screens */
+.product {
+  width: 30%;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease;
+}
+
+.product:hover {
+  transform: scale(1.03);
+}
+
+.product img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+/* Product layout for smaller screens */
 @media (max-width: 768px) {
   .navbar-nav > li > a {
     padding: 10px 15px;
@@ -73,44 +115,19 @@
     width: 100%;
     text-align: center;
   }
-}
 
-/* Product layout styles */
-.product-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between; /* Align products horizontally */
-  margin: 20px 0;
-}
-
-.product {
-  width: 30%; /* Adjust as needed, this will make three products per row */
-  margin: 10px;
-  box-sizing: border-box;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.product img {
-  width: 100%;
-  height: auto;
-  border-radius: 5px;
-}
-
-/* Adjust product layout for smaller screens */
-@media (max-width: 768px) {
   .product {
-    width: 100%; /* Each product takes full width on smaller screens */
+    width: 100%;
     margin: 10px 0;
   }
 }
 
-/* Cart and Other Page Styling */
+/* General container styling */
 .container {
   margin-top: 20px;
 }
 
+/* Typography styles */
 h1 {
   font-size: 2em;
   color: #333;
@@ -125,17 +142,11 @@ h1 {
   border-radius: 5px;
 }
 
-/* Footer Styling */
+/* Footer styling */
 footer {
   background-color: #0044cc;
   color: white;
   padding: 20px;
   text-align: center;
+  margin-top: 40px;
 }
-
-
-
-
-
-
-

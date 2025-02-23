@@ -3,14 +3,37 @@ session_start(); // Start session for user login checks
 include 'header.php'; // Include the header
 include 'db.php'; // Database connection
 
-// Fetch products from the database
-$query = "SELECT product_id, name, description, price, image_path FROM products";
+// Handle search and filter
+$search_query = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+$category_filter = isset($_GET['category']) ? mysqli_real_escape_string($conn, $_GET['category']) : '';
+$sort_by = isset($_GET['sort_by']) ? mysqli_real_escape_string($conn, $_GET['sort_by']) : 'name';
+$order = isset($_GET['order']) ? mysqli_real_escape_string($conn, $_GET['order']) : 'ASC';
+
+// Build the SQL query with conditions
+$query = "SELECT product_id, name, description, price, image_path FROM products WHERE name LIKE '%$search_query%'";
+
+if ($category_filter) {
+    $query .= " AND category = '$category_filter'";
+}
+
+// Pagination
+$products_per_page = 9;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $products_per_page;
+$query .= " LIMIT $offset, $products_per_page";
+
 $result = mysqli_query($conn, $query);
 
 // Check if the query executed successfully
 if (!$result) {
     die("Error fetching products: " . mysqli_error($conn)); // Show error message
 }
+
+// Fetch total products for pagination
+$total_query = "SELECT COUNT(*) FROM products WHERE name LIKE '%$search_query%'".($category_filter ? " AND category = '$category_filter'" : "");
+$total_result = mysqli_query($conn, $total_query);
+$total_products = mysqli_fetch_row($total_result)[0];
+$total_pages = ceil($total_products / $products_per_page);
 ?>
 
 <!DOCTYPE html>
@@ -21,25 +44,147 @@ if (!$result) {
     <title>Shop - Browse Products</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .product {
-            width: 30%;
-            margin: 10px;
+        /* Reset styles for minimal design */
+        * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin: 40px 0;
             text-align: center;
         }
+
+        /* Filter, Search, and Sort Container */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .filter-container input,
+        .filter-container select,
+        .filter-container button {
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            width: 180px;
+            background-color: #fff;
+        }
+
+        .filter-container button {
+            background-color: #007BFF;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-container button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Product Layout */
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            gap: 30px;
+        }
+
+        .product {
+            width: 30%;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
         .product img {
-            width: 100%;
+            max-width: 100%;
             height: auto;
             border-radius: 5px;
         }
+
+        .product:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .product h3 {
+            font-size: 1.2rem;
+            margin: 15px 0;
+        }
+
+        .product p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* Common Button Style */
+        .button {
+            padding: 12px 20px;
+            font-size: 1rem;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
         .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* Pagination */
+        .pagination {
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 40px;
+        }
+
+        .pagination a {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination a.active {
+            background-color: #0056b3;
+        }
+
+        .pagination a:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -47,38 +192,53 @@ if (!$result) {
     <div class="container">
         <h1>Our Products</h1>
 
-        <!-- Product container for horizontal layout -->
-        <div class="product-container"> <!-- Wrap the products inside this div -->
-            <?php
-            while ($product = mysqli_fetch_assoc($result)) {
-                $product_name = htmlspecialchars($product['name']);
-                $product_description = htmlspecialchars($product['description']);
-                $price = htmlspecialchars($product['price']);
-                $image_path = htmlspecialchars($product['image_path']);
-                ?>
+        <!-- Filter, Search, and Sort Options -->
+        <div class="filter-container">
+            <form method="GET" action="">
+                <input type="text" name="search" placeholder="Search Products" value="<?php echo $search_query; ?>">
+                <select name="category">
+                    <option value="">All Categories</option>
+                    <option value="women" <?php echo $category_filter == 'women' ? 'selected' : ''; ?>>Women</option>
+                    <option value="men" <?php echo $category_filter == 'men' ? 'selected' : ''; ?>>Men</option>
+                    <option value="children" <?php echo $category_filter == 'children' ? 'selected' : ''; ?>>Children</option>
+                </select>
+                <select name="order">
+                    <option value="ASC" <?php echo $order == 'ASC' ? 'selected' : ''; ?>>Ascending</option>
+                    <option value="DESC" <?php echo $order == 'DESC' ? 'selected' : ''; ?>>Descending</option>
+                </select>
+                <button type="submit">Apply</button>
+            </form>
+        </div>
 
+        <!-- Product Container -->
+        <div class="product-container">
+            <?php while ($product = mysqli_fetch_assoc($result)) { ?>
                 <div class="product">
-                    <?php if (!empty($image_path)) { ?>
-                        <img src="<?php echo $image_path; ?>" alt="<?php echo $product_name; ?>" class="product-image">
+                    <?php if (!empty($product['image_path'])) { ?>
+                        <img src="<?php echo $product['image_path']; ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
                     <?php } ?>
-
-                    <h3><?php echo $product_name; ?></h3>
-                    <p><?php echo $product_description; ?></p>
-                    <p><strong>Price:</strong> $<?php echo $price; ?></p>
-
+                    <h3><?php echo htmlspecialchars($product['name']); ?></h3>
+                    <p><?php echo htmlspecialchars($product['description']); ?></p>
+                    <p><strong>Price:</strong> $<?php echo htmlspecialchars($product['price']); ?></p>
                     <div class="button-group">
                         <form action="add_to_cart.php" method="POST">
                             <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
-                            <input type="hidden" name="product_name" value="<?php echo $product_name; ?>">
-                            <input type="hidden" name="product_price" value="<?php echo $price; ?>">
-                            <button type="submit" name="add_to_cart" class="btn btn-primary">Add to Cart</button>
+                            <input type="hidden" name="product_name" value="<?php echo $product['name']; ?>">
+                            <input type="hidden" name="product_price" value="<?php echo $product['price']; ?>">
+                            <button type="submit" name="add_to_cart" class="button">Add to Cart</button>
                         </form>
-
-                        <a href="product_details.php?id=<?php echo $product['product_id']; ?>" class="btn btn-secondary">View Details</a>
+                        <a href="product_details.php?id=<?php echo $product['product_id']; ?>" class="button">View Details</a>
                     </div>
                 </div>
             <?php } ?>
-        </div> <!-- End of product-container -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
+                <a href="?page=<?php echo $i; ?>&search=<?php echo urlencode($search_query); ?>&category=<?php echo urlencode($category_filter); ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>" class="<?php echo $i == $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
+            <?php } ?>
+        </div>
     </div>
 </body>
 </html>

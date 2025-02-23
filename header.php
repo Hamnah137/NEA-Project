@@ -50,6 +50,11 @@
             border-radius: 50%;
         }
 
+        /* Body padding to prevent header overlap */
+        body {
+            padding-top: 70px; /* Adjust this value based on navbar height */
+        }
+
         /* Video Background */
         .video-container {
             display: none; /* Default: Hide the video */
