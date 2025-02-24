@@ -13,7 +13,7 @@ body {
 
 /* Navbar styling */
 .navbar {
-  background-color: #0044cc; /* Dark blue background */
+  background-color: #333; /* Dark blue background */
   margin-bottom: 0;
   border-radius: 0;
   position: fixed;

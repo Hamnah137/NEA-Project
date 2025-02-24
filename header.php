@@ -5,8 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Shopping Website</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles.css"> <!-- Your custom styles -->
+<link rel="stylesheet" href="styles.css">
     <style>
+        /* Full-Screen Video Background */
+        .video-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensure video covers the screen */
+        z-index: -1; /* Ensure it stays behind all content */
+        display: none; /* Hide by default */
+        }
+        /* Show video only on the homepage */
+        body.home-page .video-background {
+        display: block; /* Show video only on homepage */
+        }
+
         /* Header Styling */
         .navbar {
             background-color: #343a40; /* Dark background for professionalism */
@@ -55,27 +71,17 @@
             padding-top: 70px; /* Adjust this value based on navbar height */
         }
 
-        /* Video Background */
-        .video-container {
-            display: none; /* Default: Hide the video */
-        }
-
-        .home-page .video-container {
-            display: block;
-        }
+        
     </style>
 </head>
-<body>
+<body class="<?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'home-page' : ''; ?>">
 
-<!-- Check if it's the home page, and if so, show the video -->
-<?php if (basename($_SERVER['PHP_SELF']) == 'index.php'): ?>
-    <div class="video-container">
-        <video autoplay muted loop class="background-video">
-            <source src="3433669499-preview.mp4" type="video/mp4">
-            Your browser does not support HTML5 video.
-        </video>
-    </div>
-<?php endif; ?>
+<!-- Video Background -->
+<video class="video-background" autoplay muted loop>
+<source src="3433669499-preview.mp4" type="video/mp4">
+Your browser does not support HTML5 video.
+</video>
+
 
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">

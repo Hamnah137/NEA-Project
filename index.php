@@ -33,7 +33,7 @@ if (!$result || !$reviews_result) {
     <style>
         /* Body and Main Layout */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Times New Roman', sans-serif;
             background-color: #f8f9fa;
             margin: 0;
             padding: 0;
@@ -81,14 +81,14 @@ if (!$result || !$reviews_result) {
         .container h3 {
             font-size: 32px;
             font-weight: 500;
-            color: #333;
+            color: #rgba(110, 14, 14, 0.1);
         }
 
         .products h2, .reviews h2 {
             font-size: 28px;
             margin-bottom: 30px;
             font-weight: bold;
-            color: #444;
+            color: #999;
         }
 
         .products .row {
@@ -141,7 +141,7 @@ if (!$result || !$reviews_result) {
         }
 
         .btn-primary {
-            background-color: #007bff;
+            background-color:rgba(104, 141, 179, 0.54);
             border: none;
         }
 
@@ -268,16 +268,6 @@ if (!$result || !$reviews_result) {
     </style>
 </head>
 <body>
-
-<!-- Video Background Only for Home Page -->
-<?php if (basename($_SERVER['PHP_SELF']) == 'index.php'): ?>
-    <div class="video-container">
-        <video autoplay muted loop class="background-video">
-            <source src="3433669499-preview.mp4" type="video/mp4">
-            Your browser does not support HTML5 video.
-        </video>
-    </div>
-<?php endif; ?>
 
 <main>
     <div class="container">
