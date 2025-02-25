@@ -6,6 +6,7 @@ require('db.php');
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Capture form data
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
@@ -61,8 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Insert data into the database
-    $query = "INSERT INTO users (username, password, email, confirm_email, confirm_password, profile_image) 
-              VALUES ('$username', '$hashedPassword', '$email', '$confirm_email', '$hashedConfirmPassword', '$profileImage')";
+    $query = "INSERT INTO users (name, username, password, email, confirm_email, confirm_password, profile_image) 
+              VALUES ('$name','$username', '$hashedPassword', '$email', '$confirm_email', '$hashedConfirmPassword', '$profileImage')";
 
     if (mysqli_query($conn, $query)) {
         echo "<div class='alert alert-success'>✅ Registration successful! You can now <a href='login.php'>log in</a>.</div>";
@@ -95,6 +96,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
                         <div class="form-group">
                             <label for="username">Username:</label>
                             <input type="text" name="username" class="form-control" required>

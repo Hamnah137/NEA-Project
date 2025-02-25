@@ -1,3 +1,8 @@
+<?php
+// Start output buffering before any HTML or output
+ob_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,20 +13,18 @@
 <link rel="stylesheet" href="styles.css">
     <style>
         /* Full-Screen Video Background */
-        .video-background {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Ensure video covers the screen */
-        z-index: -1; /* Ensure it stays behind all content */
-        display: none; /* Hide by default */
-        }
-        /* Show video only on the homepage */
-        body.home-page .video-background {
-        display: block; /* Show video only on homepage */
-        }
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure video covers the screen */
+    z-index: -1; /* Ensure it stays behind all content */
+    display: block; /* Always show the video */
+}
+
+        
 
         /* Header Styling */
         .navbar {
@@ -135,3 +138,8 @@ Your browser does not support HTML5 video.
 
 </body>
 </html>
+
+<?php
+// End output buffering and flush output
+ob_end_flush();
+?>

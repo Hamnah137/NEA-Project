@@ -6,10 +6,10 @@ include 'header.php';
 // Handle Login Submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = isset($_POST['username']) ? trim($_POST['username']) : '';
-$password = isset($_POST['password']) ? $_POST['password'] : '';
-
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
 
     if (!empty($username) && !empty($password)) {
+        // Query to get user from the Users table
         $stmt = $conn->prepare("SELECT user_id, username, password FROM users WHERE username = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
@@ -20,7 +20,22 @@ $password = isset($_POST['password']) ? $_POST['password'] : '';
             if (password_verify($password, $user['password'])) {
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['user_id'] = $user['user_id'];
-                header('Location: index.php');
+
+                // Check if the user is an admin
+                $stmt_admin = $conn->prepare("SELECT * FROM admins WHERE user_id = ?");
+                $stmt_admin->bind_param("i", $user['user_id']);
+                $stmt_admin->execute();
+                $admin_result = $stmt_admin->get_result();
+
+                if ($admin_result->num_rows === 1) {
+                    // User is an admin
+                    $_SESSION['is_admin'] = true;
+                    header('Location: admin_dashboard.php');  // Redirect to admin dashboard
+                } else {
+                    // Regular user
+                    $_SESSION['is_admin'] = false;
+                    header('Location: index.php');  // Redirect to regular user homepage
+                }
                 exit;
             } else {
                 $loginError = "Incorrect username or password.";
@@ -39,8 +54,11 @@ $password = isset($_POST['password']) ? $_POST['password'] : '';
     <?php if (isset($_SESSION['username'])): ?>
         <div class="text-center">
             <h2 class="mb-4">Welcome, <?= htmlspecialchars($_SESSION['username']); ?>!</h2>
-            <a href="index.php" class="btn btn-primary me-2">Home</a>
-            <a href="dashboard.php" class="btn btn-success me-2">Dashboard</a>
+            <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
+                <a href="admin_dashboard.php" class="btn btn-success me-2">Admin Dashboard</a>
+            <?php else: ?>
+                <a href="dashboard.php" class="btn btn-success me-2">User Dashboard</a>
+            <?php endif; ?>
             <a href="logout.php" class="btn btn-danger">Logout</a>
         </div>
     <?php else: ?>

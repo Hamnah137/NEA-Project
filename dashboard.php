@@ -1,87 +1,283 @@
+<?php
+// Set the timezone
+date_default_timezone_set('Europe/London'); // Replace with your timezone
+session_start();
+include('header.php');
+include('db.php'); // Include your database connection file
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php"); // Redirect to login page if not logged in
+    exit();
+}
+
+// Get user information from the database
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT * FROM Users WHERE user_id = ?"; // Assuming 'user_id' is the correct column name
+
+// Check if the prepare statement works
+$stmt = $conn->prepare($sql);
+if ($stmt === false) {
+    // Print out the error if prepare fails
+    die('MySQL prepare error: ' . $conn->error);
+}
+
+// Bind the user_id parameter
+$stmt->bind_param("i", $user_id);
+
+// Execute the query
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Check if there was an issue fetching the result
+if (!$result) {
+    die('Error fetching result: ' . $conn->error);
+}
+
+$user = $result->fetch_assoc();
+
+if (!$user) {
+    echo "User not found!";
+    exit();
+}
+
+// Display user details
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
+    <title>User Dashboard</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            color: #333;
         }
-    </script>
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 36px;
+        }
+
+        main {
+            width: 80%;
+            max-width: 1100px;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .profile-card {
+            display: flex;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            max-width: 900px;
+            background-color: #fff;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-card .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card .profile-img:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-card .details {
+            padding: 20px;
+            max-width: 600px;
+            flex-grow: 1;
+        }
+
+        .profile-card .details p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .profile-card .details strong {
+            font-weight: bold;
+        }
+
+        /* Stylish 'Your Actions' Section */
+        .user-actions {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .user-actions h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #007bff;
+            font-weight: 600;
+        }
+
+        .user-actions ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .user-actions li {
+            margin: 15px 0;
+            width: 250px;
+        }
+
+        .user-actions li a {
+            display: block;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-actions li a:hover {
+            background-color: #0056b3;
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-actions li a:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .edit-profile-btn {
+            margin-top: 30px;
+            padding: 14px 25px;
+            font-size: 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-profile-btn:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #343a40;
+            color: #fff;
+            font-size: 16px;
+            margin-top: 60px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            main {
+                width: 90%;
+            }
+
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-card .profile-img {
+                margin-bottom: 20px;
+            }
+
+            .user-actions h2 {
+                font-size: 24px;
+            }
+
+            .user-actions li a {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white dark:bg-gray-800 shadow-lg min-h-screen p-5">
-        <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
-        <nav class="space-y-4">
-            <a href="index.php" class="block py-2 px-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">Shop</a>
-            <a href="orders.php" class="block py-2 px-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">My Orders</a>
-            <a href="profile.php" class="block py-2 px-4 bg-blue-500 text-white rounded-lg">Profile</a>
-            <a href="reviews.php" class="block py-2 px-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">My Reviews</a>
-            <a href="logout.php" class="block py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white">Logout</a>
-        </nav>
-    </aside>
+<body>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-6">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-semibold">User Profile</h1>
-            <button onclick="toggleTheme()" class="py-2 px-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600">Toggle Theme</button>
-        </div>
+<main>
+    <h1>Welcome, <?php echo htmlspecialchars($user['name']); ?>!</h1>
 
-        <!-- Profile Section -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow p-6 mb-6">
-            <h2 class="text-2xl font-semibold mb-4">Personal Information</h2>
-            <form action="update_profile.php" method="POST" enctype="multipart/form-data" class="space-y-4">
-                <div class="flex items-center space-x-6">
-                    <img src="<?php echo isset($user['profile_image']) ? $user['profile_image'] : 'profile-placeholder.png'; ?>" alt="Profile Image" class="w-24 h-24 rounded-full object-cover">
-                    <div>
-                        <label class="block text-sm font-medium">Update Profile Image</label>
-                        <input type="file" name="profile_image" class="mt-1 block w-full">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium">Full Name</label>
-                    <input type="text" name="full_name" value="<?php echo htmlspecialchars($user['full_name']); ?>" class="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium">Email Address</label>
-                    <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" class="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
-                </div>
-                <div>
-                    <button type="submit" class="py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600">Save Changes</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Order History Section -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow p-6">
-            <h2 class="text-2xl font-semibold mb-4">Order History</h2>
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white dark:bg-gray-800 rounded-lg">
-                    <thead>
-                        <tr>
-                            <th class="py-2 px-4 text-left">Order ID</th>
-                            <th class="py-2 px-4 text-left">Date</th>
-                            <th class="py-2 px-4 text-left">Amount</th>
-                            <th class="py-2 px-4 text-left">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($orders as $order): ?>
-                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <td class="py-2 px-4"><?php echo $order['order_id']; ?></td>
-                                <td class="py-2 px-4"><?php echo $order['order_date']; ?></td>
-                                <td class="py-2 px-4">$<?php echo $order['amount']; ?></td>
-                                <td class="py-2 px-4 text-<?php echo ($order['status'] === 'Completed') ? 'green' : 'yellow'; ?>-500"><?php echo $order['status']; ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+    <div class="user-profile">
+        <div class="profile-card">
+            <img src="images/<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile Image" class="profile-img">
+            <div class="details">
+                <p><strong>Name:</strong> <?php echo htmlspecialchars($user['name']); ?></p>
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
+                <p><strong>Joined on:</strong> <?php echo date('F j, Y', strtotime($user['created_at'])); ?></p>
             </div>
         </div>
-    </main>
+    </div>
+
+    <section class="user-actions">
+        <h2>Your Actions</h2>
+        <ul>
+            <li><a href="edit_profile.php">Edit Profile</a></li>
+            <li><a href="orders.php">View Order History</a></li>
+            <li><a href="reviews.php">Your Reviews</a></li>
+            <li><a href="change_password.php">Change Password</a></li>
+            <li><a href="wishlist.php">Your Wishlist</a></li>
+        </ul>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 My Shopping Website. All rights reserved.</p>
+</footer>
+
 </body>
 </html>
+
+<?php
+// Close database connection
+$stmt->close();
+$conn->close();
+?>

@@ -14,95 +14,107 @@ include 'db.php';
     <title>Your Orders</title>
     <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
+        /* General Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-        .orders-container {
-            width: 70%;
-            max-width: 900px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
+/* Orders Container */
+.orders-container {
+    width: 80%;
+    max-width: 900px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
 
-        h2 {
-            font-size: 2.5em;
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+/* Heading Style */
+h2 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+}
 
-        .order-item {
-            padding: 15px;
-            margin-bottom: 20px;
-            background-color: #f9f9f9;
-            border-left: 5px solid #4CAF50;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+/* Order Item Styles */
+.order-item {
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border-left: 5px solid #4CAF50;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
 
-        .order-item p {
-            margin: 5px 0;
-            font-size: 1.1em;
-            color: #555;
-        }
+/* Order ID Styling */
+.order-item p {
+    margin: 5px 0;
+    font-size: 1.1em;
+    color: #555;
+}
 
-        .order-id {
-            font-weight: bold;
-            color: #333;
-        }
+.order-id {
+    font-weight: bold;
+    color: #333;
+}
 
-        .order-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-        }
+/* Button Styles */
+.order-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
 
-        .btn {
-            padding: 12px 30px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            text-align: center;
-        }
+.btn {
+    padding: 12px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    text-align: center;
+}
 
-        .btn-primary {
-            background-color: #4CAF50;
-            color: white;
-        }
+.btn-primary {
+    background-color: #4CAF50;
+    color: white;
+}
 
-        .btn-primary:hover {
-            background-color: #45a049;
-        }
+.btn-primary:hover {
+    background-color: #45a049;
+}
 
-        .btn-secondary {
-            background-color: #2196F3;
-            color: white;
-        }
+.btn-secondary {
+    background-color: #2196F3;
+    color: white;
+}
 
-        .btn-secondary:hover {
-            background-color: #1976D2;
-        }
+.btn-secondary:hover {
+    background-color: #1976D2;
+}
 
-        .no-orders {
-            font-size: 1.2em;
-            color: #999;
-            text-align: center;
-        }
+/* No Orders Message */
+.no-orders {
+    font-size: 1.2em;
+    color: #999;
+}
 
-        .login-prompt {
-            font-size: 1.2em;
-            color: #f44336;
-            text-align: center;
-        }
+/* Login Prompt Message */
+.login-prompt {
+    font-size: 1.2em;
+    color: #f44336;
+    text-align: center;
+}
+
     </style>
 </head>
 <body>
