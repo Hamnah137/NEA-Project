@@ -81,7 +81,7 @@ if (!$result || !$reviews_result) {
         .container h3 {
             font-size: 32px;
             font-weight: 500;
-            color: #rgba(110, 14, 14, 0.1);
+            color: #rgba(180, 29, 29, 0.1);
         }
 
         .products h2, .reviews h2 {
@@ -299,6 +299,7 @@ if (!$result || !$reviews_result) {
                     echo '<p>' . htmlspecialchars($row['description']) . '</p>';
                     echo '<p>$' . number_format($row['price'], 2) . '</p>';
                     echo '<p><a href="add_to_cart.php?product_id=' . $row['product_id'] . '&product_name=' . urlencode($row['name']) . '&product_price=' . $row['price'] . '" class="btn btn-primary">Add to Cart</a></p>';
+                    echo '<p><a href="wishlist.php?add=' . $row['product_id'] . '" class="btn btn-warning">Add to Wishlist ❤️</a></p>';
                     echo '<p><a href="product_details.php?id=' . $row['product_id'] . '" class="btn btn-secondary">View Details</a></p>';
                     echo '</div>';
                     echo '</div>';

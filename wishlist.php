@@ -206,42 +206,41 @@ $wishlist_items = $result->fetch_all(MYSQLI_ASSOC);
         }
 
         .shop-link {
-    margin-top: 120px; /* Increased margin for more space */
-    text-align: center;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    margin-bottom: 40px;
-}
+            margin-top: 120px;
+            text-align: center;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
 
-.shop-link h2 {
-    font-size: 2em;
-    color: #333;
-}
+        .shop-link h2 {
+            font-size: 2em;
+            color: #333;
+        }
 
-.shop-link p {
-    font-size: 1.2em;
-    color: #555;
-    margin: 10px 0 20px;
-}
+        .shop-link p {
+            font-size: 1.2em;
+            color: #555;
+            margin: 10px 0 20px;
+        }
 
-.shop-link a {
-    background-color: #3498db;
-    color: #fff;
-    padding: 20px 30px;
-    border-radius: 6px;
-    font-size: 1.2em;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+        .shop-link a {
+            background-color: #3498db;
+            color: #fff;
+            padding: 20px 30px;
+            border-radius: 6px;
+            font-size: 1.2em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-.shop-link a:hover {
-    background-color: #2980b9;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
+        .shop-link a:hover {
+            background-color: #2980b9;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
 
         @media screen and (max-width: 768px) {
             li {
@@ -261,13 +260,66 @@ $wishlist_items = $result->fetch_all(MYSQLI_ASSOC);
 
         footer {
             background-color: #333;
-            color: white;
+            color: #fff;
             padding: 15px 0;
             text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: 600;
         }
 
         footer p {
-            margin: 0;
+            font-size: 1.2em;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        footer .footer-links {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        footer .footer-links li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        footer .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        footer .footer-links a:hover {
+            color: #3498db;
+        }
+
+        footer .social-icons {
+            margin-top: 20px;
+        }
+
+        footer .social-icons a {
+            color: #fff;
+            font-size: 2em;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        footer .social-icons a:hover {
+            color: #3498db;
         }
 
     </style>
@@ -283,14 +335,14 @@ $wishlist_items = $result->fetch_all(MYSQLI_ASSOC);
         <ul>
         <?php foreach ($wishlist_items as $item): ?>
             <li>
-                <a href="shop.php?product_id=<?php echo $item['product_id']; ?>">
-                    <img src="<?php echo htmlspecialchars($item['image_path']); ?>" 
+            <a href="product_details.php?id=<?php echo $item['product_id']; ?>">
+            <img src="<?php echo htmlspecialchars($item['image_path']); ?>" 
                          alt="<?php echo htmlspecialchars($item['product_name']); ?>">
                 </a>
                 <div class="product-details">
                     <p><?php echo htmlspecialchars($item['product_name']); ?></p>
-                    <p class="price">$<?php echo htmlspecialchars($item['price']); ?></p>
-                    <a href="wishlist.php?remove=<?php echo $item['product_id']; ?>">Remove from Wishlist</a>
+                    <p class="price">$<?php echo number_format($item['price'], 2); ?></p>
+                    <a href="?remove=<?php echo $item['product_id']; ?>" class="remove-btn">Remove from Wishlist</a>
                 </div>
             </li>
         <?php endforeach; ?>
@@ -298,15 +350,27 @@ $wishlist_items = $result->fetch_all(MYSQLI_ASSOC);
     <?php endif; ?>
 
     <div class="shop-link">
-        <h2>Browse the Shop</h2>
-        <p>Explore our wide range of products and add more to your wishlist!</p>
+        <h2>Continue Shopping</h2>
+        <p>Explore more products from our collection!</p>
         <a href="shop.php">Go to Shop</a>
     </div>
 </div>
 
-<!-- Footer -->
 <footer>
-    <p>&copy; 2025 My Shopping Website. All rights reserved.</p>
+    <div class="footer-content">
+        <h3>Contact Us</h3>
+        <p>If you have any questions, feel free to reach out to us!</p>
+        <ul class="footer-links">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">FAQs</a></li>
+        </ul>
+        <div class="social-icons">
+            <a href="#" class="facebook"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
 </footer>
 
 </body>

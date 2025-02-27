@@ -22,19 +22,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id'] = $user['user_id'];
 
                 // Check if the user is an admin
-                $stmt_admin = $conn->prepare("SELECT * FROM admins WHERE user_id = ?");
+                $stmt_admin = $conn->prepare("SELECT admin_id FROM admins WHERE user_id = ?");
                 $stmt_admin->bind_param("i", $user['user_id']);
                 $stmt_admin->execute();
                 $admin_result = $stmt_admin->get_result();
 
                 if ($admin_result->num_rows === 1) {
                     // User is an admin
+                    $admin = $admin_result->fetch_assoc();
+                    $_SESSION['admin_id'] = $admin['admin_id']; // Store admin_id session
                     $_SESSION['is_admin'] = true;
                     header('Location: admin_dashboard.php');  // Redirect to admin dashboard
                 } else {
                     // Regular user
                     $_SESSION['is_admin'] = false;
-                    header('Location: index.php');  // Redirect to regular user homepage
+                    header('Location: index.php');  // Redirect to user homepage
                 }
                 exit;
             } else {

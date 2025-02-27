@@ -1,8 +1,3 @@
-<?php
-// Start output buffering before any HTML or output
-ob_start();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,68 +8,29 @@ ob_start();
 <link rel="stylesheet" href="styles.css">
     <style>
         /* Full-Screen Video Background */
-.video-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Ensure video covers the screen */
-    z-index: -1; /* Ensure it stays behind all content */
-    display: block; /* Always show the video */
-}
-
-        
+        .video-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensure video covers the screen */
+        z-index: -1; /* Ensure it stays behind all content */
+        display: none; /* Hide by default */
+        }
+        /* Show video only on the homepage */
+        body.home-page .video-background {
+        display: block; /* Show video only on homepage */
+        }
 
         /* Header Styling */
         .navbar {
             background-color: #343a40; /* Dark background for professionalism */
-        }
-        .navbar-brand {
-            color: #fff !important;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .navbar-nav .nav-item .nav-link {
-            color: #fff !important;
-            font-size: 18px;
-            padding: 10px 15px;
-        }
-        .navbar-nav .nav-item .nav-link:hover {
-            background-color: #007bff;
-            color: #fff !important;
-            border-radius: 5px;
-        }
 
-        .navbar-toggler {
-            border: none;
-        }
 
-        .navbar-toggler-icon {
-            background-color: #fff;
-        }
-
-        .cart-icon {
-            position: relative;
-        }
-
-        .cart-icon .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: #f44336;
-            color: white;
-            padding: 5px 10px;
-            font-size: 12px;
-            border-radius: 50%;
-        }
-
-        /* Body padding to prevent header overlap */
-        body {
+@@ -55,78 +71,68 @@
             padding-top: 70px; /* Adjust this value based on navbar height */
         }
-
-        
     </style>
 </head>
 <body class="<?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'home-page' : ''; ?>">
@@ -84,6 +40,15 @@ ob_start();
 <source src="3433669499-preview.mp4" type="video/mp4">
 Your browser does not support HTML5 video.
 </video>
+
+
+
+
+
+
+
+
+
 
 
 <!-- Navigation Bar -->
@@ -138,8 +103,3 @@ Your browser does not support HTML5 video.
 
 </body>
 </html>
-
-<?php
-// End output buffering and flush output
-ob_end_flush();
-?>
