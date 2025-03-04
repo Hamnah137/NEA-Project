@@ -12,29 +12,13 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
 if (isset($_GET['delete_product'])) {
     $product_id = intval($_GET['delete_product']);
     if ($product_id > 0) {
-        // Debugging the product ID
-        echo "Attempting to delete product ID: " . $product_id;
-
-        // First, delete related entries in the wishlist table
         $delete_wishlist_query = $conn->prepare("DELETE FROM wishlist WHERE product_id = ?");
         $delete_wishlist_query->bind_param("i", $product_id);
         $delete_wishlist_query->execute();
 
-        // Then, delete the product from the products table
         $stmt = $conn->prepare("DELETE FROM products WHERE product_id = ?");
         $stmt->bind_param("i", $product_id);
-
-        if ($stmt->execute()) {
-            // Check if any rows were affected
-            if ($stmt->affected_rows > 0) {
-                echo "Product deleted successfully!";
-            } else {
-                echo "Error: Product could not be deleted. No rows affected.";
-            }
-        } else {
-            // Output error if the query failed
-            echo "SQL Error: " . $stmt->error;
-        }
+        $stmt->execute();
     }
 }
 
@@ -42,14 +26,12 @@ if (isset($_GET['delete_product'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     $name = trim($_POST['name']);
     $price = trim($_POST['price']);
-    $image = $_FILES['image']['name']; // Get image file name
-    $image_tmp = $_FILES['image']['tmp_name']; // Get temporary file path
-    $image_path = 'uploads/' . basename($image); // Set the upload path
+    $image = $_FILES['image']['name'];
+    $image_tmp = $_FILES['image']['tmp_name'];
+    $image_path = 'uploads/' . basename($image);
 
     if (!empty($name) && !empty($price)) {
-        // Move uploaded image to the 'uploads' directory
         if (move_uploaded_file($image_tmp, $image_path)) {
-            // Insert product into the database
             $stmt = $conn->prepare("INSERT INTO products (name, price, image_path) VALUES (?, ?, ?)");
             $stmt->bind_param("sds", $name, $price, $image_path);
             $stmt->execute();
@@ -57,21 +39,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     }
 }
 
+// Handle user deletion
+if (isset($_GET['delete_user'])) {
+    $user_id = intval($_GET['delete_user']);
+    if ($user_id > 0) {
+        $stmt = $conn->prepare("DELETE FROM users WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+    }
+}
+
 // Fetch products
 $product_query = $conn->query("SELECT * FROM products ORDER BY product_id DESC");
 
-// Fetch orders and their details, joining with the products table to get product names
-$order_query = $conn->query("
-    SELECT orders.*, orderdetails.*, products.name AS product_name 
-    FROM orders
-    JOIN orderdetails ON orders.order_id = orderdetails.order_id
-    JOIN products ON orderdetails.product_id = products.product_id
-    ORDER BY orders.order_date DESC
-");
+// Fetch orders
+$order_query = $conn->query("SELECT orders.*, orderdetails.*, products.name AS product_name, products.image_path FROM orders JOIN orderdetails ON orders.order_id = orderdetails.order_id JOIN products ON orderdetails.product_id = products.product_id ORDER BY orders.order_date DESC");
 
 $orders = [];
 while ($order = $order_query->fetch_assoc()) {
-    // Group orders by order ID and associate products with the order
     $order_id = $order['order_id'];
     if (!isset($orders[$order_id])) {
         $orders[$order_id] = [
@@ -80,18 +65,23 @@ while ($order = $order_query->fetch_assoc()) {
             'total' => $order['total'],
             'order_date' => $order['order_date'],
             'items' => [],
-            'calculated_total' => 0 // Variable to calculate the total price of the order
+            'calculated_total' => 0
         ];
     }
-    $item_price = $order['quantity'] * $order['price']; // Calculate price per item (quantity * price)
+    $item_price = $order['quantity'] * $order['price'];
     $orders[$order_id]['items'][] = [
         'product_name' => $order['product_name'],
         'quantity' => $order['quantity'],
         'price' => $order['price'],
-        'item_total' => $item_price // Add the item total
+        'item_total' => $item_price,
+        'image_path' => $order['image_path']
     ];
-    $orders[$order_id]['calculated_total'] += $item_price; // Add to the calculated total for the order
+    $orders[$order_id]['calculated_total'] += $item_price;
 }
+
+// Fetch users
+$user_query = $conn->query("SELECT user_id, username, email FROM users ORDER BY user_id ASC");
+$total_users = $conn->query("SELECT COUNT(*) as total FROM users")->fetch_assoc()['total'];
 ?>
 
 <!DOCTYPE html>
@@ -100,6 +90,7 @@ while ($order = $order_query->fetch_assoc()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -183,9 +174,17 @@ while ($order = $order_query->fetch_assoc()) {
     </style>
 </head>
 <body>
-
 <div class="container">
     <h1>Admin Dashboard</h1>
+    <h2>Total Registered Users: <?= $total_users; ?></h2>
+    
+    <nav>
+        <ul>
+            <li><a href="users.php">View Users</a></li>
+            <li><a href="products.php">View Products</a></li>
+            <li><a href="orders_admin.php">View Orders</a></li>
+        </ul>
+    </nav>
     
     <h2>Add New Product</h2>
     <form method="POST" enctype="multipart/form-data">
@@ -194,53 +193,6 @@ while ($order = $order_query->fetch_assoc()) {
         <input type="file" name="image" accept="image/*" required>
         <button type="submit" name="add_product">Add Product</button>
     </form>
-
-    <h2>Product List</h2>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Product Name</th>
-            <th>Price</th>
-            <th>Image</th>
-            <th>Action</th>
-        </tr>
-        <?php while ($row = $product_query->fetch_assoc()): ?>
-            <tr>
-                <td><?= htmlspecialchars($row['product_id']); ?></td>
-                <td><?= htmlspecialchars($row['name']); ?></td>
-                <td>$<?= number_format($row['price'], 2); ?></td>
-                <td><img src="<?= $row['image_path']; ?>" alt="<?= $row['name']; ?>" class="product-image"></td>
-                <td>
-                    <a href="?delete_product=<?= $row['product_id']; ?>" class="delete-btn">Delete</a>
-                </td>
-            </tr>
-        <?php endwhile; ?>
-    </table>
-
-    <h2>Orders</h2>
-    <?php foreach ($orders as $order_id => $order): ?>
-        <div class="order-table">
-            <h3>Order ID: <?= htmlspecialchars($order['order_id']); ?></h3>
-            <table>
-                <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Total Price</th>
-                </tr>
-                <?php foreach ($order['items'] as $item): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($item['product_name']); ?></td>
-                        <td><?= htmlspecialchars($item['quantity']); ?></td>
-                        <td>$<?= number_format($item['price'], 2); ?></td>
-                        <td>$<?= number_format($item['item_total'], 2); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-            <p class="total-price">Total Order Price: $<?= number_format($order['calculated_total'], 2); ?></p>
-        </div>
-    <?php endforeach; ?>
 </div>
-
 </body>
 </html>

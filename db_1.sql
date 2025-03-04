@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 19, 2025 at 01:11 PM
+-- Generation Time: Mar 04, 2025 at 08:26 AM
 -- Server version: 5.7.11
 -- PHP Version: 5.6.18
 
@@ -30,6 +30,13 @@ CREATE TABLE `admins` (
   `admin_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `admins`
+--
+
+INSERT INTO `admins` (`admin_id`, `user_id`) VALUES
+(1, 42);
 
 -- --------------------------------------------------------
 
@@ -64,14 +71,18 @@ CREATE TABLE `orderdetails` (
 
 INSERT INTO `orderdetails` (`order_detail_id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
 (1, 1, 1, 8, '19.99'),
-(2, 1, 6, 1, '15.00'),
 (3, 2, 1, 1, '19.99'),
 (4, 3, 1, 1, '19.99'),
 (5, 4, 1, 1, '19.99'),
 (6, 5, 3, 1, '39.99'),
 (7, 5, 7, 1, '15.00'),
 (8, 6, 1, 1, '19.99'),
-(9, 7, 1, 1, '19.99');
+(9, 7, 1, 1, '19.99'),
+(10, 24, 1, 1, '19.99'),
+(11, 24, 2, 1, '29.99'),
+(12, 25, 2, 1, '29.99'),
+(13, 26, 2, 1, '29.99'),
+(15, 28, 2, 1, '29.99');
 
 -- --------------------------------------------------------
 
@@ -114,7 +125,12 @@ INSERT INTO `orders` (`order_id`, `user_id`, `total`, `status`, `order_date`) VA
 (20, 1, '29.99', 'Pending', '2025-02-19 10:55:41'),
 (21, 1, '0.00', 'Pending', '2025-02-19 10:56:23'),
 (22, 1, '19.99', 'Pending', '2025-02-19 10:56:32'),
-(23, 1, '19.99', 'Pending', '2025-02-19 10:58:39');
+(23, 1, '19.99', 'Pending', '2025-02-19 10:58:39'),
+(24, 7, '49.98', 'Pending', '2025-02-19 17:12:13'),
+(25, 7, '29.99', 'Pending', '2025-02-19 17:15:16'),
+(26, 7, '29.99', 'Pending', '2025-02-19 17:16:00'),
+(27, 7, '15.00', 'Pending', '2025-02-19 18:21:14'),
+(28, 7, '29.99', 'Pending', '2025-02-19 20:30:56');
 
 -- --------------------------------------------------------
 
@@ -129,19 +145,25 @@ CREATE TABLE `products` (
   `price` decimal(10,2) NOT NULL,
   `image_path` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `shop` varchar(255) NOT NULL DEFAULT 'main'
+  `shop` varchar(255) NOT NULL DEFAULT 'main',
+  `category` varchar(255) DEFAULT NULL,
+  `product_name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`product_id`, `name`, `description`, `price`, `image_path`, `created_at`, `shop`) VALUES
-(1, 'RED JUMPER WITH A SWAN', 'Keep you warm in this winter season ;)', '19.99', 'https://aidashoreditch.co.uk/cdn/shop/files/EWC409_1_600x.jpg?v=1727880838', '2025-02-05 11:17:16', 'main'),
-(2, 'GREEN HOODIE', 'Twin with nature, twin with us :)', '29.99', 'https://aidashoreditch.co.uk/cdn/shop/products/CMC379_GREEN_FLAT_600x.jpg?v=1664882952', '2025-02-05 11:19:24', 'main'),
-(3, 'BLUE DENIM JACKET', 'Go with fashion with us', '39.99', 'https://aidashoreditch.co.uk/cdn/shop/files/EWC365_5_600x.jpg?v=1726246127', '2025-02-05 11:21:30', 'main'),
-(6, 'Children Overhead Hoodie', 'Go with the fashion:)', '15.00', 'https://assets.ajio.com/medias/sys_master/root/20221101/6Qig/63602143f997ddfdbd4e21ae/-473Wx593H-441589790-blue-MODEL.jpg', '2025-02-13 15:25:52', 'main'),
-(7, 'Children Overhead Hoodie', 'Go with the fashion:)', '15.00', 'https://www.tradeprint.co.uk/dam/jcr:e64f5c2d-8100-4508-80d9-b24d519b477f/sun-yellow.webp', '2025-02-13 15:25:52', 'main');
+INSERT INTO `products` (`product_id`, `name`, `description`, `price`, `image_path`, `created_at`, `shop`, `category`, `product_name`) VALUES
+(1, 'RED JUMPER WITH A SWAN', 'Keep you warm in this winter season ;)', '19.99', 'https://aidashoreditch.co.uk/cdn/shop/files/EWC409_1_600x.jpg?v=1727880838', '2025-02-05 11:17:16', 'main', 'Women', NULL),
+(2, 'GREEN HOODIE', 'Twin with nature, twin with us :)', '29.99', 'https://aidashoreditch.co.uk/cdn/shop/products/CMC379_GREEN_FLAT_600x.jpg?v=1664882952', '2025-02-05 11:19:24', 'main', 'Men', NULL),
+(3, 'BLUE DENIM JACKET', 'Go with fashion with us', '39.99', 'https://aidashoreditch.co.uk/cdn/shop/files/EWC365_5_600x.jpg?v=1726246127', '2025-02-05 11:21:30', 'main', 'Women', NULL),
+(4, 'SOFT JACKET WITH POCKETS', 'Carry yourself with this cute jacket', '47.75', 'https://static.zara.net/assets/public/6019/f29e/717049b8af0c/312b477e54d9/05070469081-e1/05070469081-e1.jpg?ts=1729597716217&w=750', '2025-02-23 22:36:59', 'main', 'Women', NULL),
+(5, 'Tailored Long Coat', 'Style your day with this coat', '60.00', 'https://static.zara.net/assets/public/d909/32df/b9fd4d4ab211/fdcd863925d6/02170603606-e1/02170603606-e1.jpg?ts=1737471883272&w=1920', '2025-02-23 22:29:07', 'main', 'Women', NULL),
+(7, 'Children Overhead Hoodie', 'Go with the fashion:)', '15.00', 'https://www.tradeprint.co.uk/dam/jcr:e64f5c2d-8100-4508-80d9-b24d519b477f/sun-yellow.webp', '2025-02-13 15:25:52', 'main', 'Children', NULL),
+(8, 'SOFT BUTTON COAT', 'Long sleeve coat with a lapel collar. Front button fastening.', '29.99', 'https://static.zara.net/assets/public/0925/3f61/7437446783f8/ee0fc7bbf510/05070660812-e1/05070660812-e1.jpg?ts=1732623094916&w=750', '2025-02-23 22:36:59', 'main', 'Women', NULL),
+(10, 'WOOL DOUBLE-BREASTED COAT', 'Wool coat. Lapel collar and long sleeves with pronounced shoulders. Front welt pockets. Double-breasted button fastening.', '70.00', 'https://static.zara.net/assets/public/6b6a/8f0d/cef641399136/1c6e9600462d/09340147800-e1/09340147800-e1.jpg?ts=1728653112732&w=750', '2025-02-23 22:43:13', 'main', 'Women', NULL),
+(11, 'TAILORED WOOL BLEND COAT ZW COLLECTION', 'Tailored coat made of a wool blend. Notched lapel collar and long sleeves. Front flap pockets and welt breast pocket. Matching lining. Front button fastening.', '120.99', 'https://static.zara.net/assets/public/7e82/4b9b/70334c3893ad/aa116c815a82/02211806615-e1/02211806615-e1.jpg?ts=1736442418732&w=1920', '2025-02-23 22:41:57', 'main', 'Women', NULL);
 
 -- --------------------------------------------------------
 
@@ -171,10 +193,7 @@ INSERT INTO `product_reviews` (`review_id`, `product_id`, `user_id`, `rating`, `
 (8, 1, 1, 5, 'Best jumper till date that i have ever worn.', '2025-02-12 11:33:38'),
 (9, 1, 1, 5, 'Best jumper till date that i have ever worn.', '2025-02-12 11:39:50'),
 (10, 2, 4, 4, 'My all time hoodie is this now. It is really comfortable', '2025-02-12 11:52:23'),
-(15, 2, 1, 5, 'jasnjwjxd', '2025-02-19 11:24:09'),
-(16, 2, 1, 4, 's', '2025-02-19 11:25:23'),
-(17, 2, 1, 4, 's', '2025-02-19 11:30:39'),
-(18, 1, 6, 4, 'aDFCDA', '2025-02-19 12:12:09');
+(23, 1, 29, 4, 'best', '2025-02-25 21:02:00');
 
 -- --------------------------------------------------------
 
@@ -211,7 +230,7 @@ INSERT INTO `site_reviews` (`site_review_id`, `user_id`, `rating`, `comment`, `c
 (1, 3, 4, 'It\\\'s an exceptional website.', '2025-02-06 15:18:45'),
 (2, 1, 5, 'The products are really amazing.', '2025-02-12 11:01:06'),
 (3, 4, 5, 'The stuff of the products is really cool of this website.', '2025-02-12 11:50:29'),
-(4, 6, 1, 'hgjb', '2025-02-19 12:11:40');
+(25, 29, 5, 'm,,', '2025-02-23 13:55:00');
 
 -- --------------------------------------------------------
 
@@ -222,24 +241,60 @@ INSERT INTO `site_reviews` (`site_review_id`, `user_id`, `rating`, `comment`, `c
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `email` varchar(100) NOT NULL,
   `profile_image` varchar(255) DEFAULT NULL,
   `is_admin` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `confirm_email` varchar(255) DEFAULT NULL,
+  `confirm_password` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `profile_image`, `is_admin`, `created_at`) VALUES
-(1, 'linajohn', 'dollyyy', 'linajohn@rrr.com', NULL, 0, '2025-01-29 11:08:31'),
-(2, 'evanbravo', 'password', 'evan123@gmail.com', NULL, 0, '2025-01-29 11:26:10'),
-(3, 'marvi12', 'raven', 'marvi123@gmail.www', '', 0, '2025-02-05 09:28:07'),
-(4, 'minakhan', 'hello', 'minakhan@yahoo.com', '', 0, '2025-02-12 11:49:10'),
-(5, 'hhak12', 'home', 'jhajai.ksk@gmail.com', '', 0, '2025-02-19 09:25:06'),
-(6, 'humainshah', '$2y$10$sOSQKcnXpN7fgTVs/XJj0.SlJhnBBibgRyQRuluhjuId9mHZpgkuC', 'hassuaui@gmail.com', '', 0, '2025-02-19 12:06:38');
+INSERT INTO `users` (`user_id`, `username`, `name`, `password`, `email`, `profile_image`, `is_admin`, `created_at`, `confirm_email`, `confirm_password`) VALUES
+(1, 'linajohn', '', 'dollyyy', 'linajohn@rrr.com', NULL, 0, '2025-01-29 11:08:31', NULL, NULL),
+(2, 'evanbravo', '', 'password', 'evan123@gmail.com', NULL, 0, '2025-01-29 11:26:10', NULL, NULL),
+(3, 'marvi12', '', 'raven', 'marvi123@gmail.www', '', 0, '2025-02-05 09:28:07', NULL, NULL),
+(4, 'minakhan', '', 'hello', 'minakhan@yahoo.com', '', 0, '2025-02-12 11:49:10', NULL, NULL),
+(5, 'hhak12', '', 'home', 'jhajai.ksk@gmail.com', '', 0, '2025-02-19 09:25:06', NULL, NULL),
+(6, 'humainshah', '', '$2y$10$sOSQKcnXpN7fgTVs/XJj0.SlJhnBBibgRyQRuluhjuId9mHZpgkuC', 'hassuaui@gmail.com', '', 0, '2025-02-19 12:06:38', NULL, NULL),
+(7, 'alister_.', '', '$2y$10$d7q1tsudB986MHbIC0mytOzdSL2dN3bvXJ34b/J3k4M/.NBjdbtoG', 'hjagag@gmasn.ck', '', 0, '2025-02-19 16:37:33', NULL, NULL),
+(29, 'fatima', '', '$2y$10$3D4tN/D43OVzV2SayAZHLOxhvP2o.eId.rYjkfgQSYYFRDHSxpMBS', 'fat_ima@hhh.mam', '', 0, '2025-02-22 15:34:16', NULL, NULL),
+(32, 'hannah_.', '', '$2y$10$QE7d7QqqL9I4QIWaKy8kPOar6qjtWKhYWE87oZXywmw9RUPBEFocO', 'hannah@gmail.com', '', 0, '2025-02-23 18:09:26', 'hannah@gmail.com', '$2y$10$rrPrADDV5sjeiFNbfOLIrOUTv9dp1zhh1NwqN8JFbFXfPTthbVOOK'),
+(33, 'eve_edwards', '', '$2y$10$bzHH9lfYLwfbSsLpLgvy5uW8CvR.6GAmz7aSeYVW5GyihJIv58rLy', 'eve@hotmail.com', '', 0, '2025-02-24 12:32:23', 'eve@hotmail.com', '$2y$10$MrxOsN6lyxUVMuIqZre1a.Rbog0p.dD5zFYJQS.JW0hJzCRJdnTP6'),
+(35, 'evanbravo12', '', '$2y$10$7jKdJzh8X4Wc8wDJrInn/eSanqVAkAfOV5iIBvqRs1QqC3k3U7Gh.', 'evanbravo@www.hh', '', 0, '2025-02-24 16:16:41', 'evanbravo@www.hh', '$2y$10$IhGvfCItLtOFcVgdPDbpjOrgaKsUO82vw2aPpz707wgHIbEYYQP/6'),
+(37, 'Hamnah13', 'Hamnah Aziz', '$2y$10$MY3QQHK1Q6TisA73PUPea.MxdGyACFxuqrWjuox0D830ugtDko5PC', 'hamnah13@gmail.com', '', 0, '2025-02-25 16:57:53', 'hamnah@gmail.com', '$2y$10$plShLa5a94KoIh/L1evCBe6EeoniCEKWqRaIRqASrI2PlUFGc0tCy'),
+(42, 'Tara', 'Tara Raheem', '$2y$10$HkfUf4.p1UvmMN.RmKHelOBjZYZ1aJNQdo1A1GyJsaUQXqI7THyv.', 'tara@gmail.com', '', 1, '2025-02-27 18:17:20', 'tara@gmail.com', '$2y$10$yKOd2a/9yH7JzgQ3btdaRe6Z/Fxf5kQEk7BYzHMISOWIF0C15ZhPS');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wishlist`
+--
+
+CREATE TABLE `wishlist` (
+  `wishlist_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `wishlist`
+--
+
+INSERT INTO `wishlist` (`wishlist_id`, `user_id`, `product_id`) VALUES
+(5, 37, 5),
+(12, 7, 3),
+(13, 7, 5),
+(14, 7, 7),
+(16, 7, 1),
+(25, 7, 8),
+(26, 7, 2),
+(27, 7, 10);
 
 --
 -- Indexes for dumped tables
@@ -312,6 +367,14 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indexes for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD PRIMARY KEY (`wishlist_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -319,7 +382,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `cart`
 --
@@ -329,22 +392,22 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT for table `orderdetails`
 --
 ALTER TABLE `orderdetails`
-  MODIFY `order_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `order_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT for table `product_reviews`
 --
 ALTER TABLE `product_reviews`
-  MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT for table `search_log`
 --
@@ -354,12 +417,17 @@ ALTER TABLE `search_log`
 -- AUTO_INCREMENT for table `site_reviews`
 --
 ALTER TABLE `site_reviews`
-  MODIFY `site_review_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `site_review_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+--
+-- AUTO_INCREMENT for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  MODIFY `wishlist_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 --
 -- Constraints for dumped tables
 --
@@ -408,6 +476,13 @@ ALTER TABLE `search_log`
 --
 ALTER TABLE `site_reviews`
   ADD CONSTRAINT `site_reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `wishlist_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
