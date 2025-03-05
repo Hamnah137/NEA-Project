@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 04, 2025 at 08:26 AM
+-- Generation Time: Mar 05, 2025 at 12:08 PM
 -- Server version: 5.7.11
 -- PHP Version: 5.6.18
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `db_1`
+-- Database: `db_3`
 --
 
 -- --------------------------------------------------------
@@ -267,8 +267,11 @@ INSERT INTO `users` (`user_id`, `username`, `name`, `password`, `email`, `profil
 (32, 'hannah_.', '', '$2y$10$QE7d7QqqL9I4QIWaKy8kPOar6qjtWKhYWE87oZXywmw9RUPBEFocO', 'hannah@gmail.com', '', 0, '2025-02-23 18:09:26', 'hannah@gmail.com', '$2y$10$rrPrADDV5sjeiFNbfOLIrOUTv9dp1zhh1NwqN8JFbFXfPTthbVOOK'),
 (33, 'eve_edwards', '', '$2y$10$bzHH9lfYLwfbSsLpLgvy5uW8CvR.6GAmz7aSeYVW5GyihJIv58rLy', 'eve@hotmail.com', '', 0, '2025-02-24 12:32:23', 'eve@hotmail.com', '$2y$10$MrxOsN6lyxUVMuIqZre1a.Rbog0p.dD5zFYJQS.JW0hJzCRJdnTP6'),
 (35, 'evanbravo12', '', '$2y$10$7jKdJzh8X4Wc8wDJrInn/eSanqVAkAfOV5iIBvqRs1QqC3k3U7Gh.', 'evanbravo@www.hh', '', 0, '2025-02-24 16:16:41', 'evanbravo@www.hh', '$2y$10$IhGvfCItLtOFcVgdPDbpjOrgaKsUO82vw2aPpz707wgHIbEYYQP/6'),
-(37, 'Hamnah13', 'Hamnah Aziz', '$2y$10$MY3QQHK1Q6TisA73PUPea.MxdGyACFxuqrWjuox0D830ugtDko5PC', 'hamnah13@gmail.com', '', 0, '2025-02-25 16:57:53', 'hamnah@gmail.com', '$2y$10$plShLa5a94KoIh/L1evCBe6EeoniCEKWqRaIRqASrI2PlUFGc0tCy'),
-(42, 'Tara', 'Tara Raheem', '$2y$10$HkfUf4.p1UvmMN.RmKHelOBjZYZ1aJNQdo1A1GyJsaUQXqI7THyv.', 'tara@gmail.com', '', 1, '2025-02-27 18:17:20', 'tara@gmail.com', '$2y$10$yKOd2a/9yH7JzgQ3btdaRe6Z/Fxf5kQEk7BYzHMISOWIF0C15ZhPS');
+(37, 'Hamnah13', 'Hamnah Aziz', '$2y$10$MY3QQHK1Q6TisA73PUPea.MxdGyACFxuqrWjuox0D830ugtDko5PC', 'hamnah13@gmail.com', '1741170591_profile pic.avif', 0, '2025-02-25 16:57:53', 'hamnah@gmail.com', '$2y$10$plShLa5a94KoIh/L1evCBe6EeoniCEKWqRaIRqASrI2PlUFGc0tCy'),
+(42, 'Tara', 'Tara Raheem', '$2y$10$HkfUf4.p1UvmMN.RmKHelOBjZYZ1aJNQdo1A1GyJsaUQXqI7THyv.', 'tara@gmail.com', '', 1, '2025-02-27 18:17:20', 'tara@gmail.com', '$2y$10$yKOd2a/9yH7JzgQ3btdaRe6Z/Fxf5kQEk7BYzHMISOWIF0C15ZhPS'),
+(43, 'jane23', 'jane', '$2y$10$JSv0SmbGaAdzsDWPznILy.4d.e0D58V5NlB8vIpmozVovnGyDzyPO', 'jane23@www.hhh', '1741170308_67c826287b245-pf.jpeg', 0, '2025-03-05 10:23:36', 'jane23@www.hhh', '$2y$10$Ufvj3qBWnSGIst96mWpyVe6xYei8MFCcKnn0xkBGdYlX9E6rbN0Bi'),
+(44, 'sara12', 'Sarah Williams', '$2y$10$ULyaatVwJklEuPpY97wMBeLFmZPTjpg733TRCkIFgmZo77keb1jkG', 'sara12@www.hhh', 'images/67c82e1028ffe-pf.jpeg', 0, '2025-03-05 10:57:20', NULL, NULL),
+(46, 'james_.', 'James', '$2y$10$NwwApfBkCkwWpamvtBEqK..Iy0OqzbzjVN.oFQruTJ9TbDAjkCuH.', 'james@www.hhh', 'images/67c8383a6baff-pf.jpeg', 0, '2025-03-05 11:40:42', 'james@www.hhh', '$2y$10$rDjNls/ZmVcD84sxTK0PVe9F6WE/Z256joHBo/GL2IsDmcBpWaZWy');
 
 -- --------------------------------------------------------
 
@@ -294,7 +297,8 @@ INSERT INTO `wishlist` (`wishlist_id`, `user_id`, `product_id`) VALUES
 (16, 7, 1),
 (25, 7, 8),
 (26, 7, 2),
-(27, 7, 10);
+(27, 7, 10),
+(28, 43, 1);
 
 --
 -- Indexes for dumped tables
@@ -402,7 +406,7 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `product_reviews`
 --
@@ -422,12 +426,12 @@ ALTER TABLE `site_reviews`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 --
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `wishlist_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `wishlist_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 --
 -- Constraints for dumped tables
 --
