@@ -1,26 +1,42 @@
 <?php
+session_start();
 require('db.php');
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'];
+include 'email_functions.php'; // Include the email logging function
 
-    $query = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($conn, $query);
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $email = trim($_POST['email']);
 
-    if (mysqli_num_rows($result) > 0) {
-        $reset_token = bin2hex(random_bytes(16));
-        $update_query = "UPDATE users SET reset_token = '$reset_token' WHERE email = '$email'";
-        mysqli_query($conn, $update_query);
+    if (!empty($email)) {
+        // Generate a fake password reset token
+        $reset_token = bin2hex(random_bytes(16)); 
+        $reset_link = "https://yourwebsite.com/reset-password.php?token=$reset_token";
 
-        $reset_link = "http://yourwebsite.com/reset_password.php?token=$reset_token";
-        mail($email, "Password Reset", "Click here to reset your password: $reset_link");
+        // Email details
+        $to = $email;
+        $subject = "Password Reset Request";
+        $message = "Dear User,\n\nClick the link below to reset your password:\n$reset_link\n\nIf you didn't request this, please ignore this email.\n\nBest Regards,\nYour Website Team";
 
-        echo "Reset link sent to your email.";
+        // Log the email
+        sendFakeEmail($to, $subject, $message);
+
+        echo "Password reset email simulated! Check `email_log.txt`.";
     } else {
-        echo "No account found with that email.";
+        echo "Please enter a valid email address.";
     }
 }
 ?>
-<form method="POST">
-    <input type="email" name="email" placeholder="Email" required>
-    <button type="submit">Send Reset Link</button>
-</form>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Forgot Password</title>
+</head>
+<body>
+    <h2>Forgot Password</h2>
+    <form method="POST">
+        <label for="email">Enter your email:</label>
+        <input type="email" name="email" required>
+        <button type="submit">Reset Password</button>
+    </form>
+</body>
+</html>

@@ -1,6 +1,8 @@
 <?php
 session_start();
 require('header.php'); // Include header here
+require('db.php'); // Database connection
+include 'email_functions.php'; // Include the email logging function
 
 $orderId = isset($_GET['order_id']) ? $_GET['order_id'] : null;
 
@@ -8,6 +10,25 @@ if (!$orderId) {
     header('Location: shop.php');
     exit;
 }
+
+// Fetch user email from database (assuming orders are linked to users)
+$user_id = $_SESSION['user_id']; // Ensure the user is logged in
+$query = "SELECT email FROM Users WHERE id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$user_email = $user['email'] ?? 'unknown@example.com';
+
+// Email details
+$to = $user_email;
+$subject = "Order Confirmation - Order #$orderId";
+$message = "Dear Customer,\n\nThank you for your order! Your order ID is $orderId.\nWe appreciate your purchase!\n\nBest Regards,\nYour Website Team";
+
+// Log the email
+sendFakeEmail($to, $subject, $message);
+
 ?>
 
 <!DOCTYPE html>
