@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <button type="submit" class="btn btn-primary">Login</button>
                 </div>
                 <div class="text-center mt-3">
-                <a href="forgot_password.php" class="text-decoration-none">Forgot Password?</a>
+                <a href="PHPMailer-master/forgot_password.php" class="text-decoration-none">Forgot Password?</a>
                 </div>
                 <div class="text-center mt-3">
                     <a href="register.php" class="text-decoration-none">Don't have an account? Register here</a>

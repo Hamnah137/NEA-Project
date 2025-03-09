@@ -43,9 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // ✅ File size check (10MB limit)
             if ($fileSize <= 10 * 1024 * 1024) {
                 if (in_array($fileType, $allowedTypes)) {
-                    $uploadDir = 'images/';
-                    $filePath = $uploadDir . uniqid() . '-' . basename($fileName);
-                    if (move_uploaded_file($fileTmpPath, $filePath)) {
+                    $uploadDir = 'images/'; // Ensure this is 'images/'
+                    echo "Upload Directory: " . $uploadDir; // Debugging line
+                    $filePath = uniqid() . '-' . basename($fileName);  // Store only the file name
+                    echo "File Path: " . $filePath; // Debugging line
+                    if (move_uploaded_file($fileTmpPath, $uploadDir . $filePath)) {
                         $profileImage = $filePath;
                     } else {
                         echo "<div class='alert alert-danger'>⚠️ Error uploading profile image.</div>";

@@ -1,19 +1,19 @@
 <?php
-function sendFakeEmail($to, $subject, $message) {
-    $logFile = "email_log.txt"; // File to store emails
-    $timestamp = date("Y-m-d H:i:s"); // Get current time
+function sendFakeEmail($to, $reset_token, $timestamp) {
+    date_default_timezone_set('Europe/London'); // Set your preferred timezone
 
-    // Format email content
-    $emailContent = "=========================\n";
-    $emailContent .= "Time: $timestamp\n";
-    $emailContent .= "To: $to\n";
-    $emailContent .= "Subject: $subject\n";
-    $emailContent .= "Message:\n$message\n";
-    $emailContent .= "=========================\n\n";
+    $reset_link = "http://localhost/reset_password.php?token=" . urlencode($reset_token); // Replace localhost if necessary
 
-    // Append email to log file
-    file_put_contents($logFile, $emailContent, FILE_APPEND);
+    // Ensure timestamp is an integer before passing it to date()
+    if (!is_numeric($timestamp)) {
+        $timestamp = time(); // Fallback to current time if invalid
+    }
 
-    return true; // Simulate successful email
+    $formatted_time = date("Y-m-d H:i:s", (int)$timestamp);
+
+    $message = "Password Reset Request\n\nClick the link below to reset your password:\n" . $reset_link . "\n\nThis link expires in 1 hour.";
+
+    // Log the email instead of sending it
+    file_put_contents("email_log.txt", "To: $to\nTime: $formatted_time\nMessage:\n$message\n\n", FILE_APPEND);
 }
 ?>
