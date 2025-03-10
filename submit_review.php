@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("iis", $user_id, $rating, $review);
 
         if ($stmt->execute()) {
-            header("Location: site_reviews.php");
+            header("Location: index.php");
             exit;
         } else {
             echo "❌ Error submitting site review: " . $stmt->error;
