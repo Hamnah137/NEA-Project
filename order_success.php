@@ -13,7 +13,7 @@ if (!$orderId) {
 
 // Fetch user email from database (assuming orders are linked to users)
 $user_id = $_SESSION['user_id']; // Ensure the user is logged in
-$query = "SELECT email FROM Users WHERE id = ?";
+$query = "SELECT email FROM users WHERE user_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -26,8 +26,13 @@ $to = $user_email;
 $subject = "Order Confirmation - Order #$orderId";
 $message = "Dear Customer,\n\nThank you for your order! Your order ID is $orderId.\nWe appreciate your purchase!\n\nBest Regards,\nYour Website Team";
 
-// Log the email
-sendFakeEmail($to, $subject, $message);
+
+$result = sendFakeEmail($to, $subject, $message);
+if ($result) {
+    echo "DEBUG: Email sent (or simulated) successfully.";
+} else {
+    echo "DEBUG: Email sending failed.";
+}
 
 ?>
 
