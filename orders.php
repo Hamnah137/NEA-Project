@@ -16,7 +16,7 @@ include 'db.php';
     <style>
         /* General Body Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: Times New Roman, sans-serif;
     background-color: #f4f4f9;
     margin: 0;
     padding: 0;
@@ -113,6 +113,13 @@ h2 {
     font-size: 1.2em;
     color: #f44336;
     text-align: center;
+}
+body {
+    background-image: url('images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
 }
 
     </style>

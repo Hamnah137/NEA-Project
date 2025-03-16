@@ -80,11 +80,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - My Shopping Website</title>
+    <title>Register - The Wardrobe Vault</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+    background-image: url('images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
+/* Footer Styling */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 40px;
+}
+
+footer p {
+    font-size: 1em;
+    margin: 0;
+}
+</style>
 </head>
 <body>
 
@@ -143,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </div>
 
 <footer class="container text-center mt-5">
-    <p>&copy; 2024 My Shopping Website. All rights reserved.</p>
+    <p>&copy; 2024 The Wardrobe Vault. All rights reserved.</p>
 </footer>
 
 <!-- JavaScript to check file size before submitting the form -->

@@ -285,6 +285,23 @@ h1 {
         flex-direction: column;
     }
 }
+    footer {
+            background-color: #333;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+    footer p {
+            margin: 0;
+        }
+        body {
+    background-image: url('images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
 
     </style>
 </head>
@@ -300,7 +317,7 @@ h1 {
                     <option value="">All Categories</option>
                     <option value="women" <?php echo $category_filter == 'women' ? 'selected' : ''; ?>>Women</option>
                     <option value="men" <?php echo $category_filter == 'men' ? 'selected' : ''; ?>>Men</option>
-                    <option value="children" <?php echo $category_filter == 'children' ? 'selected' : ''; ?>>Children</option>
+                    <option value="kids" <?php echo $category_filter == 'kids' ? 'selected' : ''; ?>>Kids</option>
                 </select>
                 <select name="order">
                     <option value="ASC" <?php echo $order == 'ASC' ? 'selected' : ''; ?>>Ascending</option>
@@ -345,4 +362,8 @@ h1 {
         </div>
     </div>
 </body>
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 The Wardrobe Vault. All rights reserved.</p>
+</footer>
 </html>

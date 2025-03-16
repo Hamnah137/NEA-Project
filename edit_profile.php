@@ -163,6 +163,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         margin: 0;
         padding: 0;
     }
+    body {
+    background-image: url('images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
+
 </style>
 
 <!DOCTYPE html>

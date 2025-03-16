@@ -97,4 +97,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <style>
     body { padding-top: 80px; background-color: #f8f9fa; }
     .card { max-width: 420px; margin: 0 auto; }
+    body {
+    background-image: url('images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
+
 </style>

@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <style>
     /* General Body Styles */
     body {
-        font-family: 'Arial', sans-serif;
+        font-family: 'Times New Roman', sans-serif;
         margin: 0;
         padding: 0;
         background-color: #f9f9f9;
@@ -128,6 +128,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     .message.error {
         color: #f44336;
     }
+    body {
+    background-image: url('images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
+
 </style>
 
 <!DOCTYPE html>

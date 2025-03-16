@@ -45,7 +45,7 @@ if ($result) {
     <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS -->
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Times New Roman, sans-serif;
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;

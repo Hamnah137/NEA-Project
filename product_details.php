@@ -1,7 +1,7 @@
 <?php
 session_start();
-include 'header.php'; // Include header and necessary files
-include 'db.php'; // Database connection
+include 'header.php'; 
+include 'db.php'; 
 
 $product_id = isset($_GET['id']) ? $_GET['id'] : null;
 
@@ -15,13 +15,13 @@ $query = "SELECT * FROM products WHERE product_id = '$product_id'";
 $product_result = mysqli_query($conn, $query);
 $product = mysqli_fetch_assoc($product_result);
 
-// Fetch reviews for this product
-$reviews_query = "SELECT r.comment, r.rating, u.username FROM product_reviews r 
+// Fetch reviews with profile images
+$reviews_query = "SELECT r.comment, r.rating, u.username, u.profile_image 
+                  FROM product_reviews r 
                   JOIN users u ON r.user_id = u.user_id 
                   WHERE r.product_id = '$product_id'";
 $reviews_result = mysqli_query($conn, $reviews_query);
 
-// Check if there are errors in the query
 if (!$reviews_result) {
     die("Error fetching reviews: " . mysqli_error($conn));
 }
@@ -31,13 +31,17 @@ if (!$reviews_result) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($product['name']); ?> - Product Details</title>
     <link rel="stylesheet" href="style.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Times New Roman', sans-serif;
             background-color: #f4f4f9;
+            background-image: url('images/background.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
             margin: 0;
             padding: 0;
         }
@@ -88,18 +92,31 @@ if (!$reviews_result) {
             margin-bottom: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
         }
-        .review h3 {
-            margin-top: 0;
-            color: #333;
+        .profile-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid #e67e22;
         }
-        .review p {
-            font-size: 1.1em;
-            color: #555;
+        .review-content {
+            flex: 1;
         }
         .reviewer {
             font-weight: bold;
             color: #333;
+        }
+        .star-rating {
+            display: flex;
+        }
+        .star-rating span {
+            font-size: 1.5em;
+            color: #f39c12;
+            margin-right: 5px;
         }
         .btn {
             display: inline-block;
@@ -119,15 +136,6 @@ if (!$reviews_result) {
             color: #555;
             margin-top: 10px;
         }
-        /* Star Rating Styling */
-        .star-rating {
-            display: flex;
-        }
-        .star-rating span {
-            font-size: 1.5em;
-            color: #f39c12;
-            margin-right: 5px;
-        }
     </style>
 </head>
 <body>
@@ -142,29 +150,38 @@ if (!$reviews_result) {
         </div>
 
         <!-- Reviews Section -->
-<div class="review-section">
-    <h2>Customer Reviews</h2>
-    <?php while ($review = mysqli_fetch_assoc($reviews_result)) { ?>
-        <div class="review">
-            <p class="reviewer"><?php echo htmlspecialchars($review['username']); ?>:</p>
-            <div class="star-rating">
-                <?php
-                $rating = $review['rating'];
-                for ($i = 1; $i <= 5; $i++) {
-                    echo $i <= $rating ? '★' : '☆';
-                }
-                ?>
-            </div>
-            <p><?php echo nl2br(htmlspecialchars($review['comment'])); ?></p>
-        </div>
-    <?php } ?>
+        <div class="review-section">
+            <h2>Customer Reviews</h2>
+            <?php while ($review = mysqli_fetch_assoc($reviews_result)) { ?>
+                <div class="review">
+                    <!-- Display Profile Image -->
+                    <img src="images/<?php echo htmlspecialchars($review['profile_image'] ? $review['profile_image'] : 'default_image.svg'); ?>" 
+     alt="Profile Image" 
+     class="profile-image">
 
-    <!-- Leave a Review Button -->
-    <?php if (isset($_SESSION['user_id'])) { ?>
-        <a href="submit_review.php?product_id=<?php echo $product['product_id']; ?>" class="btn">Leave a Review</a>
-    <?php } else { ?>
-        <p class="login-msg">Login to leave a review. <a href="login.php">Login Here</a></p>
-    <?php } ?>
-</div>
+
+                    <div class="review-content">
+                        <p class="reviewer"><?php echo htmlspecialchars($review['username']); ?>:</p>
+                        <div class="star-rating">
+                            <?php
+                            $rating = $review['rating'];
+                            for ($i = 1; $i <= 5; $i++) {
+                                echo $i <= $rating ? '★' : '☆';
+                            }
+                            ?>
+                        </div>
+                        <p><?php echo nl2br(htmlspecialchars($review['comment'])); ?></p>
+                    </div>
+                </div>
+            <?php } ?>
+
+            <!-- Leave a Review Button -->
+            <?php if (isset($_SESSION['user_id'])) { ?>
+                <a href="submit_review.php?product_id=<?php echo $product['product_id']; ?>" class="btn">Leave a Review</a>
+            <?php } else { ?>
+                <p class="login-msg">Login to leave a review. <a href="login.php">Login Here</a></p>
+            <?php } ?>
+        </div>
+    </div>
 </body>
 </html>

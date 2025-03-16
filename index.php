@@ -26,7 +26,7 @@ if (!$result || !$reviews_result) {
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Shopping Website</title>
+    <title>The Wardrobe Vault</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -275,7 +275,7 @@ if (!$result || !$reviews_result) {
             <?php if (isset($_SESSION['username'])): ?>
                 <h3>Hello, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h3>
             <?php else: ?>
-                <h3>Welcome to My Shopping Website!</h3>
+                <h3>Welcome to The Wardrobe Vault!</h3>
                 <p>New user? Please <a href="login.php">Login</a> or <a href="register.php">Register</a>.</p>
             <?php endif; ?>
         </div>
@@ -354,7 +354,7 @@ if (!$result || !$reviews_result) {
 
 <!-- Footer -->
 <footer>
-    <p>&copy; 2025 My Shopping Website. All rights reserved.</p>
+    <p>&copy; 2025 The Wardrobe Vault. All rights reserved.</p>
 </footer>
 
 </body>

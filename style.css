@@ -8,7 +8,7 @@
 /* Body padding to prevent header overlap */
 body {
   padding-top: 80px; /* Adjust based on the navbar height */
-  font-family: Arial, sans-serif;
+  font-family: Times New Roman, sans-serif;
 }
 
 /* Navbar styling */

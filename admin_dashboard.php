@@ -93,7 +93,7 @@ $total_users = $conn->query("SELECT COUNT(*) as total FROM users")->fetch_assoc(
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Times New Roman', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;

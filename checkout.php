@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS -->
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Times New Roman, sans-serif;
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
@@ -180,6 +180,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-align: center;
             margin-top: 20px;
         }
+        body {
+    background-image: url('images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
+
     </style>
 </head>
 <body>

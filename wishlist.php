@@ -321,6 +321,13 @@ $wishlist_items = $result->fetch_all(MYSQLI_ASSOC);
         footer .social-icons a:hover {
             color: #3498db;
         }
+        body {
+    background-image: url('images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
 
     </style>
 </head>
@@ -350,8 +357,7 @@ $wishlist_items = $result->fetch_all(MYSQLI_ASSOC);
     <?php endif; ?>
 
     <div class="shop-link">
-        <h2>Continue Shopping</h2>
-        <p>Explore more products from our collection!</p>
+        <h2>Explore more products from our collection!</h2>
         <a href="shop.php">Go to Shop</a>
     </div>
 </div>

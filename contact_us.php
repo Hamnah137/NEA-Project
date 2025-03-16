@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: Times New Roman, sans-serif;
 }
 
 /* Body Styling */
@@ -138,6 +138,14 @@ footer p {
     font-size: 1em;
     margin: 0;
 }
+body {
+    background-image: url('images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
+
 </style>
 <body>
     <header>
@@ -175,7 +183,7 @@ footer p {
 </section>
 
     <footer>
-    <p>&copy; 2025 My Shopping Website. All rights reserved.</p>
+    <p>&copy; 2025 The Wardrobe Vault. All rights reserved.</p>
     </footer>
 </body>
 </html>

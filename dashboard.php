@@ -53,7 +53,7 @@ if (!$user) {
     <style>
         /* Global Styles */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Times New Roman', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f7fa;
@@ -238,6 +238,14 @@ if (!$user) {
                 font-size: 16px;
             }
         }
+        body {
+    background-image: url('images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
+
     </style>
 </head>
 <body>
@@ -270,7 +278,7 @@ if (!$user) {
 
 <!-- Footer -->
 <footer>
-    <p>&copy; 2025 My Shopping Website. All rights reserved.</p>
+    <p>&copy; 2025 The Wardrobe Vault. All rights reserved.</p>
 </footer>
 
 </body>
