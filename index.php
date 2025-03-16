@@ -10,7 +10,8 @@ $query = "SELECT product_id, name, description, price, image_path FROM products"
 $result = mysqli_query($conn, $query); // Execute the query
 
 // Query to fetch reviews from the database, including the user's name
-$reviews_query = "SELECT site_reviews.site_review_id, site_reviews.rating, site_reviews.comment, site_reviews.created_at, users.username 
+$reviews_query = "SELECT site_reviews.site_review_id, site_reviews.rating, site_reviews.comment, site_reviews.created_at, 
+                         users.username, users.profile_image 
                   FROM site_reviews
                   JOIN users ON site_reviews.user_id = users.user_id
                   ORDER BY site_reviews.created_at DESC";
@@ -190,9 +191,24 @@ if (!$result || !$reviews_result) {
         }
 
         .reviews .review p small {
-            font-size: 14px;
+            font-size: 18px;
             color: #888;
         }
+        .profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid #007bff;
+        }
+        
+        .review-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+        }
+
 
         /* Enhanced Review Submission Form */
         form {
@@ -311,21 +327,26 @@ if (!$result || !$reviews_result) {
 
         <!-- Site Reviews Section -->
         <section class="reviews">
-            <h2>What Our Users Say About Us</h2>
-            <?php 
-            while ($row = mysqli_fetch_assoc($reviews_result)) {
-                $rating = (int)$row['rating'];
-                echo '<div class="review">';
-                echo '<p><strong>' . htmlspecialchars($row['username']) . ' - Rating: ';
-                for ($i = 0; $i < 5; $i++) {
-                    echo '<span class="glyphicon glyphicon-star' . ($i < $rating ? '' : '-empty') . '"></span>';
-                }
-                echo '</strong></p>';
-                echo '<p>' . htmlspecialchars($row['comment']) . '</p>';
-                echo '<p><small>' . date('F j, Y, g:i a', strtotime($row['created_at'])) . '</small></p>';
-                echo '</div>';
-            }
-            ?>
+    <h2>What Our Users Say About Us</h2>
+    <?php 
+    while ($row = mysqli_fetch_assoc($reviews_result)) {
+        $rating = (int)$row['rating'];
+        $profile_image = !empty($row['profile_image']) ? 'images/' . htmlspecialchars($row['profile_image']) : 'images/default_image.svg';
+        
+        echo '<div class="review">';
+        echo '<div class="review-header">';
+        echo '<img src="' . $profile_image . '" alt="Profile Image" class="profile-img">';
+        echo '<p><strong>' . htmlspecialchars($row['username']) . ' - Rating: ';
+        for ($i = 0; $i < 5; $i++) {
+            echo '<span class="glyphicon glyphicon-star' . ($i < $rating ? '' : '-empty') . '"></span>';
+        }
+        echo '</strong></p>';
+        echo '</div>'; // Close review-header
+        echo '<p>' . htmlspecialchars($row['comment']) . '</p>';
+        echo '<p><small>' . date('F j, Y, g:i a', strtotime($row['created_at'])) . '</small></p>';
+        echo '</div>';
+    }
+    ?>
 
             <?php if (isset($_SESSION['user_id'])): ?>
                 <h3>Leave a Site Review</h3>

@@ -95,7 +95,7 @@ $wishlist_items = $result->fetch_all(MYSQLI_ASSOC);
     <title>Your Wishlist</title>
     <style>
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Times New Roman', sans-serif;
             margin: 0;
             padding: 0;
             background: linear-gradient(45deg, #f8f8f8, #e9ecef);
