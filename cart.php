@@ -14,12 +14,28 @@ require('header.php'); // Include the header file
     <link rel="stylesheet" href="styles.css"> <!-- Custom styles if you have any -->
 <style>
     body {
+        font-family: 'Times New Roman', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
     background-image: url('images/background.jpg'); /* Path to your image */
     background-size: cover; /* Ensures the image covers the whole screen */
     background-position: center; /* Centers the image */
     background-attachment: fixed; /* Keeps the image fixed while scrolling */
     background-repeat: no-repeat; /* Prevents the image from repeating */
 }
+
+footer {
+            background-color: #333;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
 </style>
 </head>
 <body>
@@ -91,4 +107,5 @@ require('header.php'); // Include the header file
 </div>
 
 </body>
+<?php require('footer.php'); // Include the footer file ?>
 </html>

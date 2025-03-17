@@ -121,6 +121,16 @@ body {
     background-attachment: fixed; /* Keeps the image fixed while scrolling */
     background-repeat: no-repeat; /* Prevents the image from repeating */
 }
+footer {
+            background-color: #333;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        footer p {
+            margin: 0;
+        }
 
     </style>
 </head>

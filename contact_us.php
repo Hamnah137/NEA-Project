@@ -171,19 +171,7 @@ body {
         </form>
         <iframe width="520" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" id="gmap_canvas" src="https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=Grove%20Park%20Rd%20Wrexham+()&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe> <a href='https://mapswebsite.net/'>google maps html widget</a> <script type='text/javascript' src='https://embedmaps.com/google-maps-authorization/script.js?id=0660ed1885ce365d60258b2f6690ad7abf20bdef'></script>
     </section>
-<!-- Social Media Text with Emoji Section -->
-<section class="social-media">
-    <h3>Follow Us:</h3>
-    <ul>
-        <li>ⓕ Facebook</li>
-        <li>𝕏 Twitter</li>
-        <li>🅾 Instagram</li>
-        <li>🔗 LinkedIn</li>
-    </ul>
-</section>
 
-    <footer>
-    <p>&copy; 2025 The Wardrobe Vault. All rights reserved.</p>
-    </footer>
+<?php require('footer.php'); // Include the footer file ?>
 </body>
 </html>

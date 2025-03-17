@@ -257,70 +257,7 @@ $wishlist_items = $result->fetch_all(MYSQLI_ASSOC);
                 font-size: 2.5em;
             }
         }
-
-        footer {
-            background-color: #333;
-            color: #fff;
-            padding: 15px 0;
-            text-align: center;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-
-        footer .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        footer h3 {
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        footer p {
-            font-size: 1.2em;
-            color: #ddd;
-            margin-bottom: 20px;
-        }
-
-        footer .footer-links {
-            list-style-type: none;
-            padding: 0;
-            margin: 20px 0;
-        }
-
-        footer .footer-links li {
-            display: inline;
-            margin: 0 15px;
-        }
-
-        footer .footer-links a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-        }
-
-        footer .footer-links a:hover {
-            color: #3498db;
-        }
-
-        footer .social-icons {
-            margin-top: 20px;
-        }
-
-        footer .social-icons a {
-            color: #fff;
-            font-size: 2em;
-            margin: 0 10px;
-            transition: all 0.3s ease;
-        }
-
-        footer .social-icons a:hover {
-            color: #3498db;
-        }
+        
         body {
     background-image: url('images/background.jpg'); /* Path to your image */
     background-size: cover; /* Ensures the image covers the whole screen */
@@ -362,22 +299,7 @@ $wishlist_items = $result->fetch_all(MYSQLI_ASSOC);
     </div>
 </div>
 
-<footer>
-    <div class="footer-content">
-        <h3>Contact Us</h3>
-        <p>If you have any questions, feel free to reach out to us!</p>
-        <ul class="footer-links">
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="#">FAQs</a></li>
-        </ul>
-        <div class="social-icons">
-            <a href="#" class="facebook"><i class="fab fa-facebook"></i></a>
-            <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="instagram"><i class="fab fa-instagram"></i></a>
-        </div>
-    </div>
-</footer>
+<?php require('footer.php'); // Include the footer file ?>
 
 </body>
 </html>

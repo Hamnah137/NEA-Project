@@ -276,10 +276,7 @@ if (!$user) {
     </section>
 </main>
 
-<!-- Footer -->
-<footer>
-    <p>&copy; 2025 The Wardrobe Vault. All rights reserved.</p>
-</footer>
+<?php require('footer.php'); // Include the footer file ?>
 
 </body>
 </html>

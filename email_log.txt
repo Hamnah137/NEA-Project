@@ -276,3 +276,53 @@ http://localhost/reset_password.php?token=ca77618d11d046151d733b558c3274a8
 
 This link expires in 1 hour.
 
+To: sara12@www.hhh
+Time: 2025-03-17 16:10:00
+Message:
+Password Reset Request
+
+Click the link below to reset your password:
+http://localhost/reset_password.php?token=Order+Confirmation+-+Order+%2345
+
+This link expires in 1 hour.
+
+To: sara12@www.hhh
+Time: 2025-03-17 16:11:19
+Message:
+Password Reset Request
+
+Click the link below to reset your password:
+http://localhost/reset_password.php?token=Order+Confirmation+-+Order+%2345
+
+This link expires in 1 hour.
+
+To: sara12@www.hhh
+Time: 2025-03-17 16:27:35
+Message:
+Password Reset Request
+
+Click the link below to reset your password:
+http://localhost/reset_password.php?token=Order+Confirmation+-+Order+%2345
+
+This link expires in 1 hour.
+
+To: aaron45@gmail.com
+Time: 2025-03-17 16:27:40
+Message:
+Password Reset Request
+
+Click the link below to reset your password:
+http://localhost/reset_password.php?token=Order+Confirmation+-+Order+%2346
+
+This link expires in 1 hour.
+
+To: aaron45@gmail.com
+Time: 2025-03-17 16:50:53
+Message:
+Password Reset Request
+
+Click the link below to reset your password:
+http://localhost/reset_password.php?token=Order+Confirmation+-+Order+%2346
+
+This link expires in 1 hour.
+

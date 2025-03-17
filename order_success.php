@@ -19,13 +19,12 @@ $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
-$user_email = $user['email'] ?? 'unknown@example.com';
+$user_email = $user['email'];  // Correct assignment of user's email
 
 // Email details
 $to = $user_email;
 $subject = "Order Confirmation - Order #$orderId";
 $message = "Dear Customer,\n\nThank you for your order! Your order ID is $orderId.\nWe appreciate your purchase!\n\nBest Regards,\nYour Website Team";
-
 
 $result = sendFakeEmail($to, $subject, $message);
 if ($result) {
