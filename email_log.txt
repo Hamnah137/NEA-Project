@@ -326,3 +326,23 @@ http://localhost/reset_password.php?token=Order+Confirmation+-+Order+%2346
 
 This link expires in 1 hour.
 
+To: aaron45@gmail.com
+Time: 2025-03-17 17:40:42
+Message:
+Password Reset Request
+
+Click the link below to reset your password:
+http://localhost/reset_password.php?token=Order+Confirmation+-+Order+%2349
+
+This link expires in 1 hour.
+
+To: aaron45@gmail.com
+Time: 2025-03-17 17:42:47
+Message:
+Password Reset Request
+
+Click the link below to reset your password:
+http://localhost/reset_password.php?token=Order+Confirmation+-+Order+%2349
+
+This link expires in 1 hour.
+

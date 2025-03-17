@@ -67,7 +67,10 @@ Your browser does not support HTML5 video.
                     <a class="nav-link" href="shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="contact_us.php">About Us</a>
+                    <a class="nav-link" href="about_us.php">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact_us.php">Contact Us</a>
                 </li>
                 <?php if (isset($_SESSION['username'])): ?>
                     <li class="nav-item">

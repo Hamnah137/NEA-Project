@@ -6,7 +6,7 @@ require('header.php'); // Include the header file
 require('db.php'); // Ensure this file contains your database connection logic
 
 // Query to fetch products from the database
-$query = "SELECT product_id, name, description, price, image_path FROM products"; 
+$query = "SELECT * FROM Products WHERE featured = 1"; 
 $result = mysqli_query($conn, $query); // Execute the query
 
 // Query to fetch reviews from the database, including the user's name
@@ -291,7 +291,7 @@ if (!$result || !$reviews_result) {
             <?php if (isset($_SESSION['username'])): ?>
                 <h3>Hello, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h3>
             <?php else: ?>
-                <h3>Welcome to The Wardrobe Vault!</h3>
+                <h3><strong>Welcome to The Wardrobe Vault</strong> — Affordable fashion with a purpose. Discover quality products while supporting peace, knowledge, and kindness.</h3>
                 <p>New user? Please <a href="login.php">Login</a> or <a href="register.php">Register</a>.</p>
             <?php endif; ?>
         </div>

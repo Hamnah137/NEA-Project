@@ -362,5 +362,8 @@ h1 {
         </div>
     </div>
 </body>
-<?php require('footer.php'); // Include the footer file ?>
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 The Wardrobe Vault. All rights reserved.</p>
+</footer>
 </html>

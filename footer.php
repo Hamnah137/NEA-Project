@@ -6,7 +6,7 @@
             <h3 style="margin-bottom: 10px;">Get in Touch</h3>
             <p>Email: <a href="mailto:support@wardrobevault.com" style="color: #f0f0f0; text-decoration: none;">support@wardrobevault.com</a></p>
             <p>Phone: +44 1234 567890</p>
-            <p>Address: 123 Fashion Street, London, UK</p>
+            <p>Address: 123 Grove Park Rd, Wrexham, United Kingdom</p>
         </div>
 
         <div style="flex: 1; min-width: 250px; text-align: left; padding: 0 20px;">
