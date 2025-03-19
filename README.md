@@ -1,13 +1,13 @@
 <!-- Readme -->
 
-# Shopping Platform - README
+# The Wardrobe Vault - README
 
 ## 📌 Introduction
-Welcome to the **Shopping Platform**, an e-commerce website designed to provide users with a seamless shopping experience. This platform allows users to browse, search, filter, and purchase clothing items while also supporting features like user authentication, product reviews, and an admin dashboard for product management.
+Welcome to the **The Wardrobe Vault**, an e-commerce website designed to provide users with a seamless shopping experience. This platform allows users to browse, search, filter, and purchase clothing items while also supporting features like user authentication, product reviews, and an admin dashboard for product management.
 
 ## ✨ Features
 - **User Registration & Authentication**: Secure user login and registration with email verification.
-- **Product Browsing**: View, search, and filter clothing items based on categories and price.
+- **Product Browsing**: View, search, and filter clothing items based on categories.
 - **Shopping Cart & Wishlist**: Users can add products to the cart and wishlist for future purchases.
 - **Order Processing**: Users can place orders, and admins can manage them.
 - **Product & Site Reviews**: Users can leave reviews for products and the website.
@@ -18,49 +18,58 @@ Welcome to the **Shopping Platform**, an e-commerce website designed to provide 
 ## 📂 Folder Structure
 ```
 root/
-│── images/              # Stores product and profile images
-│── css/                 # Contains CSS files for styling
-│── js/                  # JavaScript files for interactivity
+│── images/              # Stores product and profile images                 
 │── includes/            # Common backend files (header, footer, database connection)
 │── admin/               # Admin dashboard functionalities
 │── user/                # User-related functionalities (profile, orders, wishlist)
 │── index.php            # Homepage
 │── shop.php             # Product listing page
-│── product.php          # Product details page
+│── product_details.php  # Product details page
 │── cart.php             # Shopping cart page
 │── checkout.php         # Order checkout page
 │── login.php            # User login page
 │── register.php         # User registration page
 │── db.php               # Database connection file
-│── .htaccess            # URL rewriting & security configurations
 │── README.md            # Documentation
 ```
 
 ## 🛠️ Technologies Used
-- **Frontend**: HTML, CSS, JavaScript, Bootstrap
+- **Frontend**: HTML, CSS, Bootstrap
 - **Backend**: PHP (server-side scripting)
 - **Database**: MySQL (Relational Database)
 - **Version Control**: Git & GitHub
-- **Hosting**: (Specify your hosting platform, e.g., XAMPP for local or live server)
+- **Hosting**: (Specify your hosting platform, e.g., UwAmp for local or live server)
 
 ## 📌 Installation & Setup
 ### Prerequisites
-- XAMPP (for local development)
+- UwAmp (for local development)
 - PHP 7+ and MySQL
 - Git installed on your system
 
 ### Steps to Run the Project
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/shopping-platform.git
+   git clone https://github.com/yourusername/The Wardrobe Vault.git
    cd shopping-platform
    ```
 2. **Setup the database:**
    - Import the `database.sql` file into MySQL.
    - Configure `db.php` with your database credentials.
 3. **Start the server:**
-   - If using XAMPP, start Apache and MySQL.
-   - Navigate to `http://localhost/shopping-platform` in your browser.
+   - If using UwAmp.exe, start Apache and MySQL.
+   - Navigate to `http://localhost/The Wardrobe Vault` in your browser.
+   - 
+**Database Credentials**
+   - Username: root
+   - Password: root
+
+**Admin Login Credentials**
+   - Username: Tara
+   - Password: house
+
+**Customer Login Credentials**
+   - Username: robyn_.
+   - Password: hail
 
 ## 🔑 Security Measures
 - **Password Hashing**: User passwords are hashed using bcrypt.
