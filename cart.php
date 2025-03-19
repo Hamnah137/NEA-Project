@@ -109,5 +109,4 @@ footer {
 </div>
 
 </body>
-<?php require('footer.php'); // Include the footer file ?>
 </html>

@@ -45,7 +45,7 @@ if (!$reviews_result) {
             background-attachment: fixed;
             background-repeat: no-repeat;
             margin: 0;
-            padding: 0;
+            padding: 130px;
         }
         .container {
             width: 80%;

@@ -30,7 +30,7 @@ $order_query = $conn->query("
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Times New Roman', sans-serif;
             background-image: url('images/background.jpg');
             background-size: cover;
             background-position: center;

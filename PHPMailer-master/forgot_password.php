@@ -1,3 +1,5 @@
+<!-- Code for sending a password reset email using PHPMailer -->
+
 <?php
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
@@ -109,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
   <title>Forgot Password</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: Times New Roman, sans-serif;
       font-weight: 300;
       font-size: 14px;
       line-height: 1.6;
@@ -189,6 +191,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
       text-align: center;
       margin-top: 20px;
     }
+    body {
+        font-family: 'Times New Roman', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+    background-image: url('../images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
   </style>
 </head>
 <body>

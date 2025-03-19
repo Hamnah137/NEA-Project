@@ -1,3 +1,5 @@
+<!-- Code for reseting password -->
+
 <?php
 // Include database connection
 include('../db.php');

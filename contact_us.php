@@ -1,27 +1,7 @@
 <!-- Code for the "Contact Us" page -->
 
 <?php
-date_default_timezone_set('Europe/London'); // Replace with your timezone
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect form data
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $message = $_POST['message'];
-
-    // Email details
-    $to = "22129890@cambria.ac.uk";  // Replace with your email
-    $subject = "New Contact Us Message from " . $name;
-    $body = "You have received a new message from your website contact form.\n\n".
-            "Name: " . $name . "\n".
-            "Email: " . $email . "\n\n".
-            "Message: \n" . $message;
-
-    // Send email (mail function is simulated here)
-    mail($to, $subject, $body);
-
-    // Success message
-    $success = "Thank you for reaching out! We'll get back to you soon.";
-}
+include('header.php'); 
 ?>
 
 <!DOCTYPE html>
@@ -50,81 +30,42 @@ body {
 
 /* Header Styling */
 header {
-    background-color: #5c6bc0;
     color: white;
-    padding: 20px 0;
+    padding: 70px 0;
     text-align: center;
 }
 
-header h1 {
-    font-size: 2.5em;
-    margin: 0;
-}
-
-/* Contact Form Section */
-.contact-form {
-    max-width: 600px;
-    margin: 30px auto;
+/* Contact Info Section */
+.contact-info {
+    max-width: 800px;
+    margin: 0 auto;
     padding: 20px;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.contact-form h2 {
+.contact-info h2 {
     font-size: 2em;
     margin-bottom: 20px;
     color: #333;
     text-align: center;
 }
 
-/* Form Label and Input Styling */
-label {
-    display: block;
-    font-size: 1.1em;
-    margin-bottom: 8px;
-}
-
-input[type="text"],
-input[type="email"],
-textarea {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1em;
-}
-
-textarea {
-    resize: vertical;
-}
-
-/* Button Styling */
-button {
-    background-color: #5c6bc0;
-    color: white;
-    padding: 12px 20px;
-    font-size: 1.1em;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #3f4c9b;
-}
-
-/* Success Message Styling */
-.success {
-    background-color: #e1f7e1;
-    color: #2a6d2b;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    border: 1px solid #2a6d2b;
+.contact-info p {
     text-align: center;
+    font-size: 1.2em;
+    color: #666;
+}
+
+/* Map Styling */
+iframe {
+    width: 100%;
+    max-width: 800px;
+    height: 400px;
+    border: 0;
+    margin: 20px auto;
+    display: block;
 }
 
 /* Footer Styling */
@@ -140,6 +81,7 @@ footer p {
     font-size: 1em;
     margin: 0;
 }
+
 body {
     background-image: url('images/background.jpg'); /* Path to your image */
     background-size: cover; /* Ensures the image covers the whole screen */
@@ -153,25 +95,12 @@ body {
     <header>
         <h1>Contact Us</h1>
     </header>
+    <section class="contact-info">
+        <h2>Get in Touch</h2>
+        <p>If you have any questions, feel free to check the contact information in the footer below!</p>
 
-    <section class="contact-form">
-        <h2>We'd love to hear from you!</h2>
-
-        <?php if (isset($success)) { echo "<p class='success'>$success</p>"; } ?>
-
-        <form action="contact_us.php" method="POST">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" rows="4" required></textarea>
-
-            <button type="submit">Send Message</button>
-        </form>
-        <iframe width="520" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" id="gmap_canvas" src="https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=Grove%20Park%20Rd%20Wrexham+()&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe> <a href='https://mapswebsite.net/'>google maps html widget</a> <script type='text/javascript' src='https://embedmaps.com/google-maps-authorization/script.js?id=0660ed1885ce365d60258b2f6690ad7abf20bdef'></script>
+        <!-- Google Map Embed -->
+        <iframe src="https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=Grove%20Park%20Rd%20Wrexham+()&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
     </section>
 
 <?php require('footer.php'); // Include the footer file ?>

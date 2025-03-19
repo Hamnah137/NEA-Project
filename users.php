@@ -1,119 +1,124 @@
 <!-- Code to see users registered in the website -->
 
-<?php
-// Include database connection file
-include('db.php');
-
-// Start the session
-session_start();
-
-// Check if the user is logged in and is an admin
-if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== 1) {
-    header("Location: login.php");
-    exit();
-}
-
-// Fetch all orders from the orders table
-$stmt = $pdo->prepare("SELECT * FROM orders");
-$stmt->execute();
-$orders = $stmt->fetchAll();
-
-// Fetch order details and calculate the total price for each order
-$order_details = [];
-foreach ($orders as $order) {
-    // Get order items for the current order
-    $stmt = $pdo->prepare("SELECT p.product_name, od.quantity, od.price, (od.quantity * od.price) AS total_price 
-                           FROM orderdetails od 
-                           JOIN products p ON od.product_id = p.product_id 
-                           WHERE od.order_id = ?");
-    $stmt->execute([$order['order_id']]);
-    $order_details[$order['order_id']] = $stmt->fetchAll();
-
-    // Calculate total price for the order
-    $total_price = 0;
-    foreach ($order_details[$order['order_id']] as $item) {
-        $total_price += $item['total_price'];
-    }
-    $order_details[$order['order_id']]['total_price'] = $total_price;
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Manage Orders</title>
+    <title>View Users</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
+        body {
+            font-family: 'Times New Roman', sans-serif;
+            background-image: url('images/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+        .container {
+            width: 90%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #FFD700;
+        }
+
+        a {
+            color: #4ABDAC;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+
+        a:hover {
+            color: #0078ff;
+            text-decoration: underline;
+        }
+
         table {
             width: 100%;
+            margin-top: 30px;
             border-collapse: collapse;
+            color: black;
         }
 
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border: 1px solid #ddd;
+        table th, table td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #444;
         }
 
-        th {
-            background-color: #f2f2f2;
+        table th {
+            background-color: #333;
+            color: #FFD700;
         }
 
-        .order-actions {
-            display: flex;
-            justify-content: space-between;
+        table td {
+            background-color: #fff;
         }
 
-        .view-button, .update-button {
-            padding: 6px 12px;
-            background-color: #4CAF50;
+        table tr:hover {
+            background-color: #444;
+        }
+
+        .text-right {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        footer {
+            background-color: #333;
             color: white;
-            text-decoration: none;
-            border-radius: 4px;
+            padding: 15px 0;
+            text-align: center;
         }
 
-        .update-button {
-            background-color: #ff9800;
-        }
-
-        .view-button:hover, .update-button:hover {
-            background-color: #45a049;
+        footer p {
+            margin: 0;
         }
     </style>
 </head>
 <body>
-    <h1>Manage Orders</h1>
-    
-    <!-- Display orders -->
-    <table>
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>User ID</th>
-                <th>Order Date</th>
-                <th>Status</th>
-                <th>Total Price</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($orders as $order) { ?>
+    <div class="container">
+        <h1>Registered Users</h1>
+        <a href="admin_dashboard.php">Back to Dashboard</a>
+        <table>
+            <thead>
                 <tr>
-                    <td><?php echo $order['order_id']; ?></td>
-                    <td><?php echo $order['user_id']; ?></td>
-                    <td><?php echo $order['order_date']; ?></td>
-                    <td><?php echo $order['status']; ?></td>
-                    <td>$<?php echo number_format($order_details[$order['order_id']]['total_price'], 2); ?></td>
-                    <td class="order-actions">
-                        <a href="view_order_details.php?order_id=<?php echo $order['order_id']; ?>" class="view-button">View Details</a>
-                        <a href="update_order_status.php?order_id=<?php echo $order['order_id']; ?>" class="update-button">Update Status</a>
-                    </td>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
                 </tr>
-            <?php } ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php
+                session_start();
+                require('db.php');
 
+                if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+                    header('Location: login.php');
+                    exit();
+                }
+
+                $user_query = $conn->query("SELECT user_id, username, email FROM users ORDER BY user_id ASC");
+                while ($user = $user_query->fetch_assoc()) : ?>
+                <tr>
+                    <td><?= $user['user_id']; ?></td>
+                    <td><?= htmlspecialchars($user['username']); ?></td>
+                    <td><?= htmlspecialchars($user['email']); ?></td>
+                </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

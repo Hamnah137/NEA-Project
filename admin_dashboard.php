@@ -103,7 +103,7 @@ body {
     background-attachment: fixed; /* Fix background position when scrolling */
     background-repeat: no-repeat; /* Prevent background image from repeating */
     color: #fff; /* Default text color for consistency */
-    font-family: Arial, sans-serif; /* Clean and modern font */
+    font-family: Times New Roman, sans-serif; /* Clean and modern font */
     margin: 0;
     padding: 0;
 }

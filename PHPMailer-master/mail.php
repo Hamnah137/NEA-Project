@@ -1,3 +1,5 @@
+<!-- Code to send email for reseting password functionality -->
+
 <?php
 
 //Import PHPMailer classes into the global namespace

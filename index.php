@@ -84,14 +84,14 @@ if (!$result || !$reviews_result) {
         .container h3 {
             font-size: 32px;
             font-weight: 500;
-            color: #rgba(180, 29, 29, 0.1);
+            color: #007BFF;
         }
 
         .products h2, .reviews h2 {
             font-size: 28px;
             margin-bottom: 30px;
             font-weight: bold;
-            color: #999;
+            color:rgb(240, 244, 7);
         }
 
         .products .row {

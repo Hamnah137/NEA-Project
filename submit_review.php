@@ -1,5 +1,3 @@
-<!-- Code for submitting reviews -->
-
 <?php
 session_start();
 require('db.php'); // Include the database connection
@@ -144,6 +142,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-size: 1.2em;
             text-align: center;
         }
+        body {
+            background-image: url('images/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
     </style>
 </head>
 <body>
@@ -175,7 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="form-group">
             <label for="review">Your Comment:</label>
-            <textarea id="review" name="review" rows="5" required></textarea>
+            <textarea id="review" name="comment" rows="5" required></textarea>
         </div>
 
         <input type="hidden" name="product_id" value="<?php echo isset($_GET['product_id']) ? $_GET['product_id'] : ''; ?>">

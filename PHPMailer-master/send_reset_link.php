@@ -1,3 +1,5 @@
+<!-- Code to send the link to email to reset passsword -->
+
 <?php
 // Include database connection
 include('../db.php');

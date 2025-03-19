@@ -1,3 +1,5 @@
+<!-- Code to reset the password -->
+
 <?php
 // Enable error reporting
 ini_set('display_errors', 1);
