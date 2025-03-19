@@ -1,3 +1,5 @@
+<!-- Code for user's profile -->
+
 <?php
 // Set the timezone
 date_default_timezone_set('Europe/London'); // Replace with your timezone

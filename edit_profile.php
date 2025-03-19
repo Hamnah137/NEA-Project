@@ -1,3 +1,5 @@
+<!-- Code for editing your personal information like changing email, name or profile picture -->
+
 <?php
 session_start();
 include('header.php');

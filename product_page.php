@@ -1,3 +1,4 @@
+<!-- Code for the process of submitting product review -->
 <?php 
 session_start();
 require('header.php'); // Include the header file

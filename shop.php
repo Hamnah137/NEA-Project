@@ -1,3 +1,5 @@
+<!-- Code for the shop page where every product is -->
+
 <?php
 session_start(); // Start session for user login checks
 include 'header.php'; // Include the header

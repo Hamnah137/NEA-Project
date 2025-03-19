@@ -1,19 +1,44 @@
+<!-- Code to send confirmation email on placing order -->
+
 <?php
-function sendFakeEmail($to, $reset_token, $timestamp) {
-    date_default_timezone_set('Europe/London'); // Set your preferred timezone
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-    $reset_link = "http://localhost/reset_password.php?token=" . urlencode($reset_token); // Replace localhost if necessary
+// Require PHPMailer files
+require 'PHPMailer-master/src/Exception.php';
+require 'PHPMailer-master/src/PHPMailer.php';
+require 'PHPMailer-master/src/SMTP.php';
 
-    // Ensure timestamp is an integer before passing it to date()
-    if (!is_numeric($timestamp)) {
-        $timestamp = time(); // Fallback to current time if invalid
+function sendEmail($to, $subject, $message) {
+    $mail = new PHPMailer(true);
+    
+    try {
+        // Server settings
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = '22129890@cambria.ac.uk';  // Your Gmail
+        $mail->Password   = 'aipg jifj qajw hkzm';  // Use your generated App Password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
+
+        // Recipients
+        $mail->setFrom('22129890@cambria.ac.uk', 'NEA');
+        $mail->addAddress($to); // Recipient's email
+        
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body    = nl2br(htmlspecialchars($message)); // Converts newlines to <br> for better formatting
+
+        $mail->send();
+
+        echo "✅ Email has been sent successfully.<br>";
+        return true;
+    } catch (Exception $e) {
+        echo "❌ Email could not be sent. Error: {$mail->ErrorInfo}<br>";
+        return false;
     }
-
-    $formatted_time = date("Y-m-d H:i:s", (int)$timestamp);
-
-    $message = "Password Reset Request\n\nClick the link below to reset your password:\n" . $reset_link . "\n\nThis link expires in 1 hour.";
-
-    // Log the email instead of sending it
-    file_put_contents("email_log.txt", "To: $to\nTime: $formatted_time\nMessage:\n$message\n\n", FILE_APPEND);
 }
 ?>
+

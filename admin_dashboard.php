@@ -1,3 +1,5 @@
+<!-- Code for the admin's dashboard where it can add products and by clicking on links can see the products, users and Orders -->
+
 <?php 
 session_start();
 require('db.php');
@@ -92,85 +94,127 @@ $total_users = $conn->query("SELECT COUNT(*) as total FROM users")->fetch_assoc(
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        body {
-            font-family: 'Times New Roman', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            width: 80%;
-            margin: 40px auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2 {
-            text-align: center;
-            color: #333;
-        }
-        input, button {
-            width: 100%;
-            padding: 12px;
-            margin: 15px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            font-size: 16px;
-        }
-        button {
-            background-color: #007BFF;
-            color: white;
-            cursor: pointer;
-            border: none;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
+        /* Body Styling */
+body {
+    background-color: #f4f4f4;
+    background-image: url('images/background.jpg'); /* Background image */
+    background-size: cover; /* Ensure the image covers the entire background */
+    background-position: center; /* Center the background image */
+    background-attachment: fixed; /* Fix background position when scrolling */
+    background-repeat: no-repeat; /* Prevent background image from repeating */
+    color: #fff; /* Default text color for consistency */
+    font-family: Arial, sans-serif; /* Clean and modern font */
+    margin: 0;
+    padding: 0;
+}
+
+/* Header and Footer Styling */
+header, footer {
+    background: rgba(0, 0, 0, 0.8); /* Semi-transparent dark background */
+    color: #fff; /* White text for strong contrast */
+    text-align: center;
+    padding: 20px;
+    font-weight: bold;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+}
+
+/* Container Styling */
+.container {
+    width: 80%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7); /* Darkened container for readability */
+    border-radius: 12px; /* Rounded corners for a softer feel */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Deep shadow for depth */
+}
+
+/* Headings Styling */
+h1, h2 {
+    color: #FFD700; /* Gold text for highlighting headings */
+    font-weight: bold;
+}
+
+/* Paragraph Styling */
+p {
+    color: #ddd; /* Light grey for softer contrast and better readability */
+    line-height: 1.8; /* Increase line height for better readability */
+    font-size: 1.1em; /* Slightly larger text for comfortable reading */
+}
+
+/* Link Styling */
+a {
+    display: block;
             padding: 15px;
-            text-align: left;
-        }
-        .delete-btn {
-            background-color: #dc3545;
+            background-color:  0.3s ease, transform 0.2s ease;
             color: white;
-            padding: 5px 12px;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .delete-btn:hover {
-            background-color: #c82333;
-        }
-        .product-image {
-            width: 120px;
-            height: auto;
-            border-radius: 5px;
-        }
-        .order-table {
-            margin-top: 20px;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #fafafa;
-        }
-        .order-table th, .order-table td {
-            border-bottom: 1px solid #ddd;
-        }
-        .total-price {
             font-size: 18px;
-            font-weight: bold;
-            color: #007BFF;
-        }
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+a:hover {
+    color: #0078ff; /* Change to blue on hover for interactivity */
+    text-decoration: underline;
+}
+
+/* Button Styling */
+button {
+    background-color: #4ABDAC; /* Matching the calming teal */
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #0078ff; /* Change to blue on hover */
+    transform: scale(1.05); /* Subtle scaling effect */
+}
+
+/* Form and Input Styling */
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background-color: #333;
+    color: #fff;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+    border-color: #FFD700; /* Gold border on focus for emphasis */
+    outline: none; /* Remove default outline */
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    h1, h2 {
+        font-size: 1.8em; /* Adjust heading size on smaller screens */
+    }
+
+    p {
+        font-size: 1em; /* Adjust paragraph font size for smaller screens */
+    }
+
+    button {
+        width: 100%; /* Full-width buttons on smaller screens */
+    }
+}
     </style>
 </head>
 <body>

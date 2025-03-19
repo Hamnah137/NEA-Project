@@ -1,3 +1,5 @@
+<!-- Code to upload profile image -->
+
 <?php
 session_start();
 require('db.php');

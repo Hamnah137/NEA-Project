@@ -1,3 +1,5 @@
+<!-- Code to see users registered in the website -->
+
 <?php
 // Include database connection file
 include('db.php');

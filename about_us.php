@@ -1,3 +1,5 @@
+<!-- The code for the about us pafe of the website -->
+ 
 <?php include('header.php'); ?>
 <!DOCTYPE html>
 <html lang="en">

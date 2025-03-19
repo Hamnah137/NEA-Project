@@ -1,3 +1,5 @@
+<!-- Code for the "Contact Us" page -->
+
 <?php
 date_default_timezone_set('Europe/London'); // Replace with your timezone
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -7,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = $_POST['message'];
 
     // Email details
-    $to = "your-email@example.com";  // Replace with your email
+    $to = "22129890@cambria.ac.uk";  // Replace with your email
     $subject = "New Contact Us Message from " . $name;
     $body = "You have received a new message from your website contact form.\n\n".
             "Name: " . $name . "\n".

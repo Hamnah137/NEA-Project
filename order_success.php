@@ -1,8 +1,16 @@
+<!-- Code for the placing order -->
+
 <?php
 session_start();
 require('header.php'); // Include header here
 require('db.php'); // Database connection
-include 'email_functions.php'; // Include the email logging function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Include the PHPMailer autoloader (adjust the path as needed)
+require 'PHPMailer-master/src/Exception.php';
+require 'PHPMailer-master/src/PHPMailer.php';
+require 'PHPMailer-master/src/SMTP.php';
 
 $orderId = isset($_GET['order_id']) ? $_GET['order_id'] : null;
 
@@ -24,13 +32,35 @@ $user_email = $user['email'];  // Correct assignment of user's email
 // Email details
 $to = $user_email;
 $subject = "Order Confirmation - Order #$orderId";
-$message = "Dear Customer,\n\nThank you for your order! Your order ID is $orderId.\nWe appreciate your purchase!\n\nBest Regards,\nYour Website Team";
+$message = "Dear Customer,\n\nThank you for your order! Your order ID is $orderId.\nWe appreciate your purchase!\n\nBest Regards,\nThe Wardrobe Vault";
 
-$result = sendFakeEmail($to, $subject, $message);
-if ($result) {
-    echo "DEBUG: Email sent (or simulated) successfully.";
-} else {
-    echo "DEBUG: Email sending failed.";
+// Create a new PHPMailer instance
+$mail = new PHPMailer(true);
+
+try {
+    // Server settings
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com'; // Specify your SMTP server (e.g., Gmail, your mail provider)
+    $mail->SMTPAuth = true;
+    $mail->Username = '22129890@cambria.ac.uk'; // SMTP username
+    $mail->Password = 'aipg jifj qajw hkzm'; // SMTP password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587; // Port to connect to (587 is for TLS, 465 is for SSL)
+
+    // Recipients
+    $mail->setFrom('22129890@cambria.ac.uk', 'The Wardrobe Vault'); // Sender's email and name
+    $mail->addAddress($to); // Add recipient's email
+
+    // Content
+    $mail->isHTML(false); // Set email format to plain text
+    $mail->Subject = $subject;
+    $mail->Body    = $message;
+
+    // Send the email
+    $mail->send();
+    echo "DEBUG: Email sent successfully.";
+} catch (Exception $e) {
+    echo "DEBUG: Email could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }
 
 ?>
@@ -119,6 +149,13 @@ if ($result) {
             color: #4CAF50;
             margin-bottom: 20px;
         }
+        body {
+    background-image: url('images/background.jpg'); /* Path to your image */
+    background-size: cover; /* Ensures the image covers the whole screen */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
     </style>
 </head>
 <body>

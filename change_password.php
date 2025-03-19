@@ -1,3 +1,5 @@
+<!-- Code to change the password -->
+
 <?php
 session_start();
 include('db.php');

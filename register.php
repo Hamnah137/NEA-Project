@@ -1,3 +1,5 @@
+<!-- Code to register in the website -->
+
 <?php
 session_start();
 require('header.php');

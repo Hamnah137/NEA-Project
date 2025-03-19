@@ -1,3 +1,5 @@
+<!-- Code for the process of submitting product review -->
+
 <?php
 include 'db.php';
 

@@ -1,3 +1,5 @@
+<!-- Code for the footer of the website -->
+
 <!-- Footer -->
 <footer style="background-color: #1a1a1a; color: #f0f0f0; padding: 40px 0; text-align: center;">
     <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-around;">

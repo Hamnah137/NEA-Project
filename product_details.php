@@ -1,3 +1,5 @@
+<!-- Code to show product details -->
+
 <?php
 session_start();
 include 'header.php'; 

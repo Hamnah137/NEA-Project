@@ -1,3 +1,5 @@
+<!-- Code for the process of submitting site review -->
+
 <?php  
 if (!isset($_SESSION['user_id'])) {
     echo "<p>Please <a href='login.php'>log in</a> to leave a review.</p>";

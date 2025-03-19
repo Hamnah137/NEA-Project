@@ -1,3 +1,5 @@
+<!-- Code for the process of submitting site review -->
+
 <?php
 session_start();
 include 'db.php';

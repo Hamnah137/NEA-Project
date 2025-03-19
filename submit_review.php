@@ -1,3 +1,5 @@
+<!-- Code for submitting reviews -->
+
 <?php
 session_start();
 require('db.php'); // Include the database connection
@@ -12,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get POST data
     $user_id = $_SESSION['user_id'];
     $rating = isset($_POST['rating']) ? intval($_POST['rating']) : 0;
-    $review = isset($_POST['review']) ? mysqli_real_escape_string($conn, $_POST['review']) : '';
+    $review = isset($_POST['comment']) ? mysqli_real_escape_string($conn, $_POST['comment']) : '';
 
     // Validate rating
     if ($rating < 1 || $rating > 5) {

@@ -1,3 +1,5 @@
+<!-- Readme -->
+
 # Shopping Platform - README
 
 ## 📌 Introduction

@@ -1,3 +1,5 @@
+<!-- Code to remove the item from the cart -->
+
 <?php
 session_start();
 

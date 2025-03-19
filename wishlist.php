@@ -1,3 +1,5 @@
+<!-- Code to add and see items in the wishlist -->
+
 <?php
 session_start();
 include('db.php');

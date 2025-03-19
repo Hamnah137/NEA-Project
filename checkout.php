@@ -1,3 +1,5 @@
+<!-- Code to checkout after adding products to cart -->
+
 <?php
 session_start();
 require('header.php'); // Include header here

@@ -1,3 +1,5 @@
+<!-- Code for the order(s) history -->
+
 <?php
 session_start();
 require('header.php'); // Include header

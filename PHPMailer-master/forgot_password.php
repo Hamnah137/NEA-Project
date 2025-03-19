@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
             $updateStmt->execute();
 
             // Send the email with the password reset link using PHPMailer
-            $reset_link = "http://localhost/NEA-Project/NEA-Project/PHPMailer-master/reset_password.php?token=" . $token;
+            $reset_link = "http://localhost/NEA%20Project/PHPMailer-master/reset_password.php?token=" . $token;
 
             // Create a new PHPMailer instance
             $mail = new PHPMailer(true);

@@ -1,3 +1,5 @@
+<!-- Code to logout -->
+
 <?php
 	session_start();
 	// Destroying All Sessions

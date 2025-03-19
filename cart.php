@@ -1,3 +1,5 @@
+<!-- Code to show what's in the cart -->
+
 <?php
 session_start();
 require('header.php'); // Include the header file

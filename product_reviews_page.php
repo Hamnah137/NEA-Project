@@ -1,3 +1,5 @@
+<!-- Code for the process of submitting product review -->
+
 <?php
 session_start(); // Ensure session is started
 include 'db.php';
